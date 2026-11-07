@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Restaurant tipping guidance and an exact bill split for your next trip.">
+  <title>Travel Tipping · Utility Suite</title>
+</head>
+<body>
+  <main class="container">
+    <header>
+      <p class="eyebrow">Utility Suite / Travel</p>
+      <h1>A good meal.<br>A clear bill.</h1>
+      <p class="intro">Check local tipping guidance, choose an additional tip and share the bill fairly.</p>
+    </header>
+    <div class="layout">
+      <section class="card" aria-labelledby="calculator-title">
+        <h2 id="calculator-title">Travel Tipping</h2>
+        <form id="calculator" novalidate>
+          <div class="row">
+            <div><label for="destination">Destination</label><select id="destination" name="destination"><option value="US">United States</option><option value="UK">United Kingdom</option><option value="FR">France</option></select></div>
+            <div><label for="currency">Currency</label><select id="currency" name="currency" aria-describedby="currency-help"><option value="USD">USD · US dollar</option><option value="GBP">GBP · British pound</option><option value="EUR">EUR · Euro</option></select></div>
+          </div>
+          <p class="help" id="currency-help">Currency changes the display only. It does not convert amounts. Enter all amounts in the selected currency. Changing destination updates guidance only.</p>
+          <aside class="guidance" aria-labelledby="guidance-title">
+            <h3 id="guidance-title">Restaurant guidance</h3>
+            <p id="guidance-text"></p>
+            <p class="help"><a id="guidance-source"></a><br>Reviewed <time id="reviewed"></time></p>
+          </aside>
+          <label for="subtotal">Bill subtotal before tax</label>
+          <input id="subtotal" name="subtotal" inputmode="decimal" placeholder="100.00" aria-describedby="subtotal-help subtotal-error">
+          <p class="help" id="subtotal-help">Use the receipt subtotal before tax and separately listed charges. If service or tax is already embedded in an amount, do not enter it again below. Tip uses exactly this subtotal.</p>
+          <p class="error" id="subtotal-error"></p>
+          <label for="charges">Tax / service charges to add</label>
+          <input id="charges" name="charges" inputmode="decimal" value="0.00" aria-describedby="charges-help charges-error">
+          <p class="help" id="charges-help">Enter only charges not already in the subtotal. Check included gratuity or service before adding a tip; another tip is not automatically required.</p>
+          <p class="error" id="charges-error"></p>
+          <div class="row">
+            <div><label for="tipPercent">Additional tip (%)</label><input id="tipPercent" name="tipPercent" inputmode="decimal" value="0" aria-describedby="tip-help tipPercent-error"><p class="error" id="tipPercent-error"></p></div>
+            <div><label for="diners">Number of diners</label><input id="diners" name="diners" inputmode="numeric" value="1" aria-describedby="diners-error"><p class="error" id="diners-error"></p></div>
+          </div>
+          <p class="help" id="tip-help">Editable, 0–100%. Applied only to the subtotal, excluding the charges above. Starts at zero; destination changes never choose a tip for you.</p>
+          <p class="help">Use decimal points, no commas. Amounts: 0–1,000,000 with up to two decimal places. Diners: 1–1,000.</p>
+          <button type="submit">Calculate &amp; split</button>
+          <p id="form-status" role="alert"></p>
+        </form>
+      </section>
+      <section class="card results" aria-labelledby="results-title" aria-live="polite" aria-atomic="true">
+        <p class="eyebrow">The breakdown</p><h2 id="results-title">Your result</h2>
+        <div id="result-content"><p class="muted">Enter your bill and select Calculate &amp; split to see the tip, total and each person's share.</p></div>
+      </section>
+    </div>
+    <footer><p>Amounts are calculated in whole cents. Any leftover cents go to the first diners so shares add up exactly.</p><p>Nothing is saved yet. Named trips and history are planned for Sunday.</p></footer>
+  </main>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

@@ -38,7 +38,8 @@
     li { margin-bottom:8px; }
     .badge { display:inline-block; border-radius:6px; background:#f7f0dc; color:#685315; padding:2px 8px; font-size:.8rem; font-weight:600; }
     .evidence { margin:0; padding:28px; border:1px dashed #829b92; border-radius:10px; background:var(--wash); }
-    .evidence p:last-child { margin-bottom:0; }
+    .evidence img { display:block; width:100%; height:auto; border-radius:8px; }
+    .evidence figcaption { margin-top:16px; color:var(--muted); font-size:.9rem; }
     .entry { border-top:1px solid var(--line); padding-top:20px; margin-top:24px; }
     dl { margin:0; }
     dt { font-weight:600; margin-top:16px; }
@@ -81,46 +82,46 @@
         <h3>Three non-goals for Build 1</h3>
         <ol><li>Accounts and cloud synchronization.</li><li>Payments, bank connections and receipt scanning.</li><li>The complete utility catalog and live currency conversion.</li></ol>
         <h3>Riskiest assumption &amp; architecture · preliminary</h3>
-        <p>Travelers need guidance they can interpret correctly, especially when service is already included. Planned checks cover guidance sources, additional tips, rounding and clear per-person totals. User validation is pending.</p>
-        <p><strong>Planned flow:</strong> Destination guidance + bill inputs → tip and equal split calculation → result → explicit save to a named trip → retrieval. App stack and storage design are pending; this Product Page is standalone HTML/CSS.</p>
+        <p>Travelers need guidance they can interpret correctly, especially when service is already included. Guidance sources have been reviewed, and automated checks cover additional tips, rounding and exact share totals. Builder checks are recorded below; external user validation is pending.</p>
+        <p><strong>Planned flow:</strong> Destination guidance + bill inputs → tip and equal split calculation → result → explicit save to a named trip → retrieval. The local calculator uses HTML/CSS and JavaScript with Vite and Node’s built-in test runner. Saving and storage design remain pending; this Product Page is separate standalone HTML/CSS.</p>
       </section>
       <section id="status" aria-labelledby="status-title">
         <p class="eyebrow">02 · Current implementation status</p>
-        <h2 id="status-title">Documentation drafted. Prototype planned.</h2>
-        <p>The repository currently contains course documentation. This update does not implement app functionality.</p>
+        <h2 id="status-title">Tipping calculator implemented locally.</h2>
+        <p>The local prototype provides destination guidance, an editable additional tip and an exact bill split. Named trips and saved history are not implemented yet.</p>
         <ul>
-          <li><strong>Completed in this batch:</strong> PRD v1, weekend plan, Monday submission checklist and this Product Page draft.</li>
-          <li><span class="badge">Planned · Saturday</span> Destination tipping guidance, additional tip calculator and equal bill splitting.</li>
+          <li><strong>Documentation completed:</strong> PRD v1, weekend plan, Monday submission checklist and this Product Page draft.</li>
+          <li><span class="badge">Implemented locally</span> US, UK (London-based) and France guidance with sources and reviewed dates; USD/GBP/EUR display without conversion; editable additional tip and integer-cent bill splitting.</li>
           <li><span class="badge">Planned · Sunday</span> Named trips, explicit saving and retrieval of saved results/history.</li>
-          <li><span class="badge">Pending</span> Calculator checks, end-to-end verification, user testing and publication.</li>
+          <li><span class="badge">Pending</span> Full save/retrieve workflow, external user testing and public deployment verification.</li>
         </ul>
         <h3>Earlier work &amp; individual course work</h3>
-        <p>An earlier version of Utility Suite was built with my brother. This course project is new individual work. The completed work recorded here is the course documentation draft; any earlier code or assets reused later will be identified explicitly.</p>
+        <p>An earlier version of Utility Suite was built with my brother. This course project is new individual work. This course’s new individual work includes the documentation and local tipping calculator. Any earlier code or assets reused later will be identified explicitly.</p>
       </section>
       <section id="prototype" aria-labelledby="prototype-title">
         <p class="eyebrow">03 · Product showcase</p>
         <h2 id="prototype-title">Prototype screenshot or GIF</h2>
         <figure class="evidence">
-          <p><strong>Pending — no prototype screenshot or GIF is available yet.</strong></p>
-          <p>After the local workflow works, add a real capture here with a descriptive caption. No prototype functionality is demonstrated by this placeholder.</p>
+          <img src="assets/tipping-demo.png" width="1494" height="1860" alt="Utility Suite Travel Tipping calculator with a USD 100 subtotal, USD 8 charges, 20 percent additional tip and three diners; results show USD 20 tip, USD 128 total, and shares of USD 42.67, USD 42.67 and USD 42.66.">
+          <figcaption>Actual local calculator screenshot, November 7, 2026. A $100 subtotal + $8 charges + 20% additional tip produces a $128 total, split into $42.67, $42.67 and $42.66. Saved trips and history remain pending.</figcaption>
         </figure>
-        <!-- Future captures belong under docs/assets/ and use a relative src such as
-             assets/tipping-prototype.png so they work under the GitHub Pages project URL. -->
         <p class="meta">The app may remain local through Week 4. A cloud app link and two-minute video are planned for Build 5.</p>
       </section>
       <section id="build-log" aria-labelledby="log-title">
         <p class="eyebrow">04 · Weekly build log</p>
         <h2 id="log-title">Build 1 · November 7–9</h2>
         <dl>
-          <dt>What works / what shipped</dt><dd>Course documentation and Product Page drafted locally. No working calculator or saved history is implemented in this repository yet. Public deployment is pending.</dd>
+          <dt>What works / what shipped</dt><dd>The tipping calculator is implemented locally: destination guidance, currency display, editable additional tip on the subtotal, validation and exact cent allocation. The screenshot above shows the working $128 example. Saved trips and history remain pending; public deployment verification is pending.</dd>
           <dt>Learning</dt><dd>Pending — record actual learning from implementation, AI practice and Terminus Episodes 1 and 2.</dd>
-          <dt>Changes / problems</dt><dd>The 55-utility vision is narrowed to one travel dining workflow for Build 1. Saturday focuses on guidance and calculation; Sunday adds saving and retrieval. Implementation findings are pending.</dd>
-          <dt>User testing</dt><dd>Pending — no participant observations or feedback have been recorded.</dd>
+          <dt>Changes / problems</dt><dd>The 55-utility vision is narrowed to one travel dining workflow for Build 1. Calculation uses integer cents and assigns remainder cents to the first diners so the shares sum exactly. Saving and retrieval remain Sunday’s work.</dd>
+          <dt>Builder manual checks</dt><dd>Jiwanjot checked the $100 subtotal + $8 charges + 20% tip example: $20 tip, $128 total and shares of $42.67, $42.67 and $42.66. He also checked zero-diner validation, successfully recalculated after correcting the input, and visually checked the form and results in a narrow browser window.</dd>
+          <dt>Automated verification</dt><dd>The actual implementation run passed all 27 tests with Node’s built-in test runner, including both required split examples and validation errors. The Vite production build and whitespace check passed.</dd>
+          <dt>External user testing</dt><dd>Pending — builder checks are not external user testing. No outside participant observations or feedback have been recorded.</dd>
           <dt>Actual build costs</dt><dd>Not yet recorded.</dd>
           <dt>Actual hours</dt><dd>Not yet recorded.</dd>
         </dl>
         <h3>Before Monday's noon submission</h3>
-        <ul><li>Finish and verify the core workflow; disclose anything unfinished.</li><li>Add real prototype evidence, learning, user observations, costs and hours.</li><li>Fill in builder details and verify attribution.</li><li>Push meaningful commits on at least two separate days outside class; publish and check the Product Page.</li><li>Submit the Product Page and repository URLs in Icerynk; prepare the November 10 two-minute demo.</li></ul>
+        <ul><li>Finish and verify the core workflow; disclose anything unfinished.</li><li>Keep the prototype evidence current; add actual learning, external user observations, costs and hours when available.</li><li>Fill in builder details and verify attribution.</li><li>Push meaningful commits on at least two separate days outside class; publish and check the Product Page.</li><li>Submit the Product Page and repository URLs in Icerynk; prepare the November 10 two-minute demo.</li></ul>
         <div class="entry">
           <h3>Later course milestones · all pending</h3>
           <ul>
@@ -133,18 +134,18 @@
           <p class="meta">All build deadlines are noon, New York time. Later build results and changes will be logged here as work occurs.</p>
         </div>
         <h3>Economics &amp; evidence snapshot</h3>
-        <p>Cumulative spend, cost per user run and hours: not yet recorded. Analytics and user evidence: pending. Week 6 sponsor recommendation: pending.</p>
+        <p>Cumulative spend, cost per user run and hours: not yet recorded. Analytics and external user evidence: pending. Builder manual checks and prototype evidence are recorded above. Week 6 sponsor recommendation: pending.</p>
       </section>
       <section id="roadmap" aria-labelledby="roadmap-title">
         <p class="eyebrow">05 · Future roadmap</p>
         <h2 id="roadmap-title">One useful workflow first. A broader suite over time.</h2>
         <ol>
-          <li><strong>Build 1:</strong> Tipping guidance, additional tip calculation, equal splitting and results saved to named trips.</li>
+          <li><strong>Build 1:</strong> Tipping guidance, additional tip calculation and equal splitting are implemented locally. Saving to named trips and retrieving history remain pending.</li>
           <li><strong>Next:</strong> Currency conversion, including live conversion beyond Build 1.</li>
           <li><strong>Then:</strong> Favorites and personal preferences for units and currency.</li>
           <li><strong>Long term:</strong> The remaining utility groups in a 55-utility roadmap. Detailed group names and sequencing are pending.</li>
         </ol>
-        <p class="meta">These are plans, not completed features or delivery promises.</p>
+        <p class="meta">Beyond the local calculator described above, roadmap features remain planned; dates and details may change.</p>
       </section>
     </main>
     <footer>

@@ -93,8 +93,9 @@
           <li><strong>Documentation completed:</strong> PRD v1, weekend plan, Monday submission checklist and this Product Page draft.</li>
           <li><span class="badge">Implemented locally</span> US, UK (London-based) and France guidance with sources and reviewed dates; USD/GBP/EUR display without conversion; editable additional tip and integer-cent bill splitting.</li>
           <li><span class="badge">Planned · Sunday</span> Named trips, explicit saving and retrieval of saved results/history.</li>
-          <li><span class="badge">Pending</span> Full save/retrieve workflow, external user testing and public deployment verification.</li>
+          <li><span class="badge">Pending</span> Full save/retrieve workflow and external user testing.</li>
         </ul>
+        <p><strong>Published and verified:</strong> The Product Page and prototype screenshot are available at <a href="https://building-with-ai-f26.github.io/jsd10030-utilityApp/">https://building-with-ai-f26.github.io/jsd10030-utilityApp/</a>. The calculator runs locally.</p>
         <h3>Earlier work &amp; individual course work</h3>
         <p>An earlier version of Utility Suite was built with my brother. This course project is new individual work. This course’s new individual work includes the documentation and local tipping calculator. Any earlier code or assets reused later will be identified explicitly.</p>
       </section>
@@ -111,17 +112,22 @@
         <p class="eyebrow">04 · Weekly build log</p>
         <h2 id="log-title">Build 1 · November 7–9</h2>
         <dl>
-          <dt>What works / what shipped</dt><dd>The tipping calculator is implemented locally: destination guidance, currency display, editable additional tip on the subtotal, validation and exact cent allocation. The screenshot above shows the working $128 example. Saved trips and history remain pending; public deployment verification is pending.</dd>
-          <dt>Learning</dt><dd>Pending — record actual learning from implementation, AI practice and Terminus Episodes 1 and 2.</dd>
+          <dt>What works / what shipped</dt><dd>The tipping calculator is implemented locally: destination guidance, currency display, editable additional tip on the subtotal, validation and exact cent allocation. The screenshot above shows the working $128 example. Saved trips and history remain pending. The Product Page and prototype screenshot are published and verified at the public URL linked above; the calculator remains local.</dd>
+          <dt>Learning</dt>
+          <dd>
+            <p>This was my first time using Codex. I learned how to set up my GitHub repository, connect Codex to it and use Terminal to run the app locally. I also learned how to commit changes and push them to GitHub.</p>
+            <p>Working through one task at a time helped me understand the process. I gave Codex a specific request, reviewed its proposed changes and checked the result before moving on. I’m getting more comfortable explaining what I want to build, what should stay unchanged and how to check whether it works.</p>
+            <p>I also tested the calculator myself. I checked the bill split, tried an invalid number of diners and reviewed the layout in a smaller browser window. Splitting $128 between three people showed why rounding matters: two people pay $42.67 and one pays $42.66 so the shares add up correctly.</p>
+          </dd>
           <dt>Changes / problems</dt><dd>The 55-utility vision is narrowed to one travel dining workflow for Build 1. Calculation uses integer cents and assigns remainder cents to the first diners so the shares sum exactly. Saving and retrieval remain Sunday’s work.</dd>
           <dt>Builder manual checks</dt><dd>Jiwanjot checked the $100 subtotal + $8 charges + 20% tip example: $20 tip, $128 total and shares of $42.67, $42.67 and $42.66. He also checked zero-diner validation, successfully recalculated after correcting the input, and visually checked the form and results in a narrow browser window.</dd>
           <dt>Automated verification</dt><dd>The actual implementation run passed all 27 tests with Node’s built-in test runner, including both required split examples and validation errors. The Vite production build and whitespace check passed.</dd>
           <dt>External user testing</dt><dd>Pending — builder checks are not external user testing. No outside participant observations or feedback have been recorded.</dd>
-          <dt>Actual build costs</dt><dd>Not yet recorded.</dd>
-          <dt>Actual hours</dt><dd>Not yet recorded.</dd>
+          <dt>Actual build costs</dt><dd>Codex token usage and any associated cost have not been confirmed. I have not incurred any other project expenses.</dd>
+          <dt>Actual hours</dt><dd>Approximately 1.5 hours on Saturday, November 7, 2026.</dd>
         </dl>
         <h3>Before Monday's noon submission</h3>
-        <ul><li>Finish and verify the core workflow; disclose anything unfinished.</li><li>Keep the prototype evidence current; add actual learning, external user observations, costs and hours when available.</li><li>Fill in builder details and verify attribution.</li><li>Push meaningful commits on at least two separate days outside class; publish and check the Product Page.</li><li>Submit the Product Page and repository URLs in Icerynk; prepare the November 10 two-minute demo.</li></ul>
+        <ul><li>Finish and verify the core workflow; disclose anything unfinished.</li><li>Keep the prototype evidence and learning current; add external user observations and confirm Codex usage and cost when available.</li><li>Fill in builder details and verify attribution.</li><li>Push meaningful commits on at least two separate days outside class; recheck the published Product Page after updates.</li><li>Submit the Product Page and repository URLs in Icerynk; prepare the November 10 two-minute demo.</li></ul>
         <div class="entry">
           <h3>Later course milestones · all pending</h3>
           <ul>
@@ -134,7 +140,7 @@
           <p class="meta">All build deadlines are noon, New York time. Later build results and changes will be logged here as work occurs.</p>
         </div>
         <h3>Economics &amp; evidence snapshot</h3>
-        <p>Cumulative spend, cost per user run and hours: not yet recorded. Analytics and external user evidence: pending. Builder manual checks and prototype evidence are recorded above. Week 6 sponsor recommendation: pending.</p>
+        <p>Time spent so far: approximately 1.5 hours. No other project expenses reported. Codex token usage and any associated cost remain unconfirmed. Cost per user run has not been measured. Analytics and external user evidence: pending. Builder manual checks and prototype evidence are recorded above. Week 6 sponsor recommendation: pending.</p>
       </section>
       <section id="roadmap" aria-labelledby="roadmap-title">
         <p class="eyebrow">05 · Future roadmap</p>

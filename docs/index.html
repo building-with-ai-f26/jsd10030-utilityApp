@@ -1,265 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>[Your Product Name] · Building with AI (Fall 2026)</title>
-
-  <!-- Week 1: create your PostHog account only.
-       Build 2: paste your project's current PostHog web snippet here,
-       then install analytics in the local app and verify events. -->
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Utility Suite: an ad-free everyday utility collection. Course PRD, Build 1 plans and progress.">
+  <title>Utility Suite · Building with AI</title>
+  <!-- Week 1: create a PostHog account. Build 2: install analytics on this page
+       and the local app, then verify events. No analytics are installed yet. -->
   <style>
-    :root {
-      --bg: #fafafa;
-      --card: #ffffff;
-      --text: #111827;
-      --muted: #4b5563;
-      --border: #e5e7eb;
-      --accent: #1d63dc;
-      --tag-bg: #eff6ff;
-      --tag-text: #1e40af;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "DM Sans", "Segoe UI", Roboto, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-    }
-    .container {
-      max-width: 820px;
-      margin: 0 auto;
-      padding: 48px 24px 80px;
-    }
-    header {
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 28px;
-      margin-bottom: 32px;
-    }
-    .eyebrow {
-      display: inline-block;
-      font-size: 12px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      background: var(--tag-bg);
-      color: var(--tag-text);
-      padding: 4px 10px;
-      border-radius: 999px;
-      margin-bottom: 12px;
-    }
-    h1 {
-      font-size: 36px;
-      line-height: 1.15;
-      margin: 0 0 12px;
-      letter-spacing: -0.02em;
-    }
-    .tagline {
-      font-size: 19px;
-      color: var(--muted);
-      margin: 0 0 20px;
-    }
-    .cta-row {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    .btn {
-      display: inline-block;
-      padding: 10px 18px;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 15px;
-      text-decoration: none;
-      background: var(--accent);
-      color: #fff;
-    }
-    .btn-secondary {
-      background: var(--card);
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
-    section {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 24px 28px;
-      margin-bottom: 24px;
-    }
-    h2 {
-      font-size: 20px;
-      margin: 0 0 14px;
-      letter-spacing: -0.01em;
-    }
-    h3 {
-      font-size: 16px;
-      margin: 18px 0 6px;
-    }
-    p, ul {
-      margin: 0 0 12px;
-      color: #1f2937;
-    }
-    .grid-2 {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 16px;
-    }
-    .stat-box {
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 14px 16px;
-      background: var(--bg);
-    }
-    .stat-label {
-      font-size: 12px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-    .stat-value {
-      font-size: 20px;
-      font-weight: 700;
-      margin-top: 4px;
-    }
-    .log-entry {
-      border-top: 1px solid var(--border);
-      padding-top: 16px;
-      margin-top: 16px;
-    }
-    .log-entry:first-of-type {
-      border-top: none;
-      padding-top: 0;
-      margin-top: 0;
-    }
-    .meta {
-      font-size: 13px;
-      color: var(--muted);
-    }
+    :root { color-scheme: light; --ink:#172d36; --muted:#4e646d; --accent:#116758; --line:#d7e2df; --paper:#fff; --wash:#f2f6f4; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; background:var(--wash); color:var(--ink); font:1rem/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    a { color:var(--accent); text-underline-offset:4px; overflow-wrap:anywhere; }
+    a:hover { text-decoration-thickness:2px; }
+    a:focus-visible { outline:3px solid var(--accent); outline-offset:5px; }
+    .wrap { max-width:1080px; margin:auto; padding:0 24px; }
+    .skip { position:absolute; left:16px; top:-100px; padding:10px; background:white; }
+    .skip:focus { top:12px; }
+    header { padding:64px 0 40px; }
+    .eyebrow { color:var(--accent); font-size:.78rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; }
+    h1 { font-size:clamp(2.7rem,8vw,5rem); line-height:1.08; letter-spacing:-.055em; margin:20px 0; }
+    h2 { font-size:1.6rem; line-height:1.3; margin:0 0 20px; letter-spacing:-.025em; }
+    h3 { font-size:1.06rem; margin:24px 0 8px; }
+    p { margin:0 0 16px; }
+    .lede { max-width:730px; font-size:clamp(1.15rem,3vw,1.4rem); color:var(--muted); }
+    .meta { color:var(--muted); font-size:.9rem; }
+    nav { display:flex; flex-wrap:wrap; gap:12px 24px; margin:28px 0; }
+    nav a { font-weight:600; }
+    .deadline { border-left:3px solid var(--accent); padding-left:16px; }
+    main { padding-bottom:24px; }
+    section { background:var(--paper); border:1px solid var(--line); border-radius:16px; padding:32px; margin-bottom:24px; scroll-margin-top:20px; }
+    .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; }
+    .grid h3 { margin-top:0; }
+    .workflow { background:#eaf4ef; padding:20px; border-radius:10px; font-weight:600; }
+    ul,ol { padding-left:24px; margin:8px 0 16px; }
+    li { margin-bottom:8px; }
+    .badge { display:inline-block; border-radius:6px; background:#f7f0dc; color:#685315; padding:2px 8px; font-size:.8rem; font-weight:600; }
+    .evidence { margin:0; padding:28px; border:1px dashed #829b92; border-radius:10px; background:var(--wash); }
+    .evidence p:last-child { margin-bottom:0; }
+    .entry { border-top:1px solid var(--line); padding-top:20px; margin-top:24px; }
+    dl { margin:0; }
+    dt { font-weight:600; margin-top:16px; }
+    dd { margin:0; color:var(--muted); }
+    footer { padding:8px 0 48px; }
+    @media(max-width:640px) { .wrap { padding:0 16px; } header { padding-top:36px; } section { padding:24px 20px; } .grid { grid-template-columns:1fr; gap:8px; } }
+    @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } }
   </style>
 </head>
 <body>
-  <div class="container">
-    <!-- HERO / PRODUCT PITCH -->
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="wrap">
     <header>
-      <span class="eyebrow">NYU Stern · Building with AI · Fall 2026</span>
-      <h1>[Your Product Name]</h1>
-      <p class="tagline">[One clear sentence: Who is this for, and what painful job does it do for them?]</p>
-      <div class="cta-row">
-        <a class="btn" href="#live-demo" onclick="window.posthog && posthog.capture('clicked_try_product')">See the Product →</a>
-        <a class="btn btn-secondary" href="#prd">Read the Living PRD</a>
-        <a class="btn btn-secondary" href="#build-log">Weekly Build Log</a>
-      </div>
+      <p class="eyebrow">NYU Stern · Building with AI · Fall 2026</p>
+      <h1>Utility Suite</h1>
+      <p class="lede">Everyday tools, together in one ad-free app. Starting with restaurant tipping and bill splitting for travelers.</p>
+      <p class="meta">Product Page draft · PRD v1 · Updated November 7, 2026</p>
+      <nav aria-label="Page sections">
+        <a href="#prd">Read the PRD</a><a href="#status">Current status</a><a href="#prototype">Prototype evidence</a><a href="#build-log">Build log</a><a href="#roadmap">Roadmap</a>
+      </nav>
+      <p class="deadline"><strong>Build 1 due:</strong> Monday, November 9, 2026 at noon, New York time.</p>
     </header>
-
-    <!-- DEMO / SCREENSHOT / VIDEO SHOWCASE -->
-    <section id="live-demo">
-      <h2>Product Showcase (Prototype / Live App / 2-Min Video)</h2>
-      <p>
-        <strong>Current Status:</strong> [Build 1: local prototype / Builds 2–4: local app / Build 5: cloud app]<br />
-        <strong>Demo:</strong> [Add a screenshot or GIF now; add the live cloud app URL in Build 5.]
-      </p>
-      <p class="meta">
-        Ask your coding agent to embed a screenshot or GIF of your local prototype for Build 1. Keep this evidence current, then add your cloud app link and two-minute video in Build 5.
-      </p>
-    </section>
-
-    <!-- LIVING PRD (Updated every week!) -->
-    <section id="prd">
-      <h2>Living PRD (Product Requirements Document)</h2>
-      <p class="meta">Updated every week as we test with real users and learn what works.</p>
-
-      <h3>1. Target User & The Job to Be Done</h3>
-      <p><strong>Who is this for?</strong> [Name a specific, reachable person or role you have direct access to.]</p>
-      <p><strong>The painful "Before" workflow:</strong> [How do they do this today, and why is it slow, manual, or broken?]</p>
-      <p><strong>The "After" workflow with this product:</strong> [What does your tool do for them in one sitting?]</p>
-
-      <h3>2. Scope & Explicit Non-Goals</h3>
-      <ul>
-        <li><strong>In Scope (Core Workflow):</strong> [The 1 main workflow this product does reliably]</li>
-        <li><strong>Out of Scope #1:</strong> [Feature you are deliberately NOT building in 6 weeks]</li>
-        <li><strong>Out of Scope #2:</strong> [Feature you are deliberately NOT building in 6 weeks]</li>
-        <li><strong>Out of Scope #3:</strong> [Feature you are deliberately NOT building in 6 weeks]</li>
-      </ul>
-
-      <h3>3. How It Works Under the Hood & Riskiest Assumption (Week 2+)</h3>
-      <p><strong>Riskiest Assumption:</strong> [What is the #1 technical or user risk that could sink this product?]</p>
-      <p><strong>Simple Architecture:</strong> [User Input] → [Your App / Server] → [AI Model / Tool] → [Output]</p>
-
-      <h3>4. Unit Economics & Analytics Snapshot (Updated Weekly)</h3>
-      <div class="grid-2">
-        <div class="stat-box">
-          <div class="stat-label">Cumulative Build Spend</div>
-          <div class="stat-value">[Record actual spend]</div>
+    <main id="main">
+      <section id="prd" aria-labelledby="prd-title">
+        <p class="eyebrow">01 · Living product requirements</p>
+        <h2 id="prd-title">PRD version 1</h2>
+        <h3>The problem</h3>
+        <p>My phone has a few built-in tools, but more specific tasks usually send me to another website or app. I often have to deal with ads, features I don't need, and uncertainty about what data the app collects. If I need the result later, I may have to do the calculation again.</p>
+        <h3>The product</h3>
+        <p>I want to bring useful everyday tools into one ad-free app with a consistent layout. Users will be able to pin favorites, choose preferred units and currency, and save selected results together. These are product goals; the full collection is not implemented.</p>
+        <h3>First user</h3>
+        <p>A classmate or friend planning an international trip who needs help calculating restaurant tips and splitting bills. A specific participant and testing session are pending.</p>
+        <div class="grid">
+          <div><h3>Before</h3><p>Search tipping customs, open a calculator, divide the bill and save a screenshot—or lose the result.</p></div>
+          <div><h3>After · intended experience</h3><p>Check the destination guidance, calculate and split the bill, save the result to a trip and find it again later.</p></div>
         </div>
-        <div class="stat-box">
-          <div class="stat-label">Est. Cost Per User Run</div>
-          <div class="stat-value">[Not yet estimated]</div>
+        <h3>One core workflow</h3>
+        <p class="workflow">Choose destination → calculate tip → split bill → save to trip → retrieve saved result.</p>
+        <p><strong>Build 1 scope:</strong> Restaurant tipping guidance, additional tip calculation, equal bill splitting, explicit saving to a named trip and retrieval of saved results.</p>
+        <h3>Three non-goals for Build 1</h3>
+        <ol><li>Accounts and cloud synchronization.</li><li>Payments, bank connections and receipt scanning.</li><li>The complete utility catalog and live currency conversion.</li></ol>
+        <h3>Riskiest assumption &amp; architecture · preliminary</h3>
+        <p>Travelers need guidance they can interpret correctly, especially when service is already included. Planned checks cover guidance sources, additional tips, rounding and clear per-person totals. User validation is pending.</p>
+        <p><strong>Planned flow:</strong> Destination guidance + bill inputs → tip and equal split calculation → result → explicit save to a named trip → retrieval. App stack and storage design are pending; this Product Page is standalone HTML/CSS.</p>
+      </section>
+      <section id="status" aria-labelledby="status-title">
+        <p class="eyebrow">02 · Current implementation status</p>
+        <h2 id="status-title">Documentation drafted. Prototype planned.</h2>
+        <p>The repository currently contains course documentation. This update does not implement app functionality.</p>
+        <ul>
+          <li><strong>Completed in this batch:</strong> PRD v1, weekend plan, Monday submission checklist and this Product Page draft.</li>
+          <li><span class="badge">Planned · Saturday</span> Destination tipping guidance, additional tip calculator and equal bill splitting.</li>
+          <li><span class="badge">Planned · Sunday</span> Named trips, explicit saving and retrieval of saved results/history.</li>
+          <li><span class="badge">Pending</span> Calculator checks, end-to-end verification, user testing and publication.</li>
+        </ul>
+        <h3>Earlier work &amp; individual course work</h3>
+        <p>An earlier version of Utility Suite was built with my brother. This course project is new individual work. The completed work recorded here is the course documentation draft; any earlier code or assets reused later will be identified explicitly.</p>
+      </section>
+      <section id="prototype" aria-labelledby="prototype-title">
+        <p class="eyebrow">03 · Product showcase</p>
+        <h2 id="prototype-title">Prototype screenshot or GIF</h2>
+        <figure class="evidence">
+          <p><strong>Pending — no prototype screenshot or GIF is available yet.</strong></p>
+          <p>After the local workflow works, add a real capture here with a descriptive caption. No prototype functionality is demonstrated by this placeholder.</p>
+        </figure>
+        <!-- Future captures belong under docs/assets/ and use a relative src such as
+             assets/tipping-prototype.png so they work under the GitHub Pages project URL. -->
+        <p class="meta">The app may remain local through Week 4. A cloud app link and two-minute video are planned for Build 5.</p>
+      </section>
+      <section id="build-log" aria-labelledby="log-title">
+        <p class="eyebrow">04 · Weekly build log</p>
+        <h2 id="log-title">Build 1 · November 7–9</h2>
+        <dl>
+          <dt>What works / what shipped</dt><dd>Course documentation and Product Page drafted locally. No working calculator or saved history is implemented in this repository yet. Public deployment is pending.</dd>
+          <dt>Learning</dt><dd>Pending — record actual learning from implementation, AI practice and Terminus Episodes 1 and 2.</dd>
+          <dt>Changes / problems</dt><dd>The 55-utility vision is narrowed to one travel dining workflow for Build 1. Saturday focuses on guidance and calculation; Sunday adds saving and retrieval. Implementation findings are pending.</dd>
+          <dt>User testing</dt><dd>Pending — no participant observations or feedback have been recorded.</dd>
+          <dt>Actual build costs</dt><dd>Not yet recorded.</dd>
+          <dt>Actual hours</dt><dd>Not yet recorded.</dd>
+        </dl>
+        <h3>Before Monday's noon submission</h3>
+        <ul><li>Finish and verify the core workflow; disclose anything unfinished.</li><li>Add real prototype evidence, learning, user observations, costs and hours.</li><li>Fill in builder details and verify attribution.</li><li>Push meaningful commits on at least two separate days outside class; publish and check the Product Page.</li><li>Submit the Product Page and repository URLs in Icerynk; prepare the November 10 two-minute demo.</li></ul>
+        <div class="entry">
+          <h3>Later course milestones · all pending</h3>
+          <ul>
+            <li><strong>Build 2 · Nov 16:</strong> Smallest local version, PRD v2 and documented setup. Create a PostHog account in Week 1; install analytics on the Product Page and local app and verify events in Build 2.</li>
+            <li><strong>Build 3 · Nov 23:</strong> Core workflow with real inputs and funnel events.</li>
+            <li><strong>Build 4 · Nov 30:</strong> Choose Track A (10-case domain evaluation and one outside user review) or Track B (3–5 outside users, replay findings and fixes to the top three friction points). Update PRD v4 with evidence.</li>
+            <li><strong>Build 5 · Dec 7:</strong> Cloud launch, secret checks, spend cap, tested two-minute rollback and two-minute video.</li>
+            <li><strong>Sponsor memo · Dec 14:</strong> Recommendation backed by actual usage, full costs and risks.</li>
+          </ul>
+          <p class="meta">All build deadlines are noon, New York time. Later build results and changes will be logged here as work occurs.</p>
         </div>
-        <div class="stat-box">
-          <div class="stat-label">User Evidence (Analytics from Build 2)</div>
-          <div class="stat-value">[Not yet measured]</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-label">Sponsor Call (Week 6)</div>
-          <div class="stat-value">TBD</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- WEEKLY BUILD LOG (Updated at least twice a week via Git commits) -->
-    <section id="build-log">
-      <h2>Weekly Build Log</h2>
-      <p class="meta">Build on at least two separate days each week outside class, including the November 3 break. Push commits and log actual progress, failures, PRD changes, costs, and hours here. All build deadlines are noon, New York time.</p>
-
-      <div class="log-entry">
-        <h3>Build 1 · Intent.md & Throwaway Prototype (Due Nov 9)</h3>
-        <ul>
-          <li><strong>What shipped:</strong> [What you actually built; link your local prototype screenshot or GIF above.]</li>
-          <li><strong>Things learned with AI:</strong> [What you learned from AI practice and Terminus Episodes 1 and 2.]</li>
-          <li><strong>What broke / changed in PRD:</strong> [Fill in]</li>
-          <li><strong>Cost & time this week:</strong> $[0.00] · [0] hours</li>
-        </ul>
-      </div>
-
-      <div class="log-entry">
-        <h3>Build 2 · Smallest Local Version & PostHog (Due Nov 16)</h3>
-        <ul>
-          <li><strong>What shipped:</strong> [Local working slice, PostHog verified on this page and the local app, PRD v2, and local setup in AGENTS.md]</li>
-          <li><strong>What broke / changed in PRD:</strong> [Fill in]</li>
-          <li><strong>Cost & time this week:</strong> $[0.00] · [0] hours</li>
-        </ul>
-      </div>
-
-      <div class="log-entry">
-        <h3>Build 3 · Build.exe: The Core Workflow (Due Nov 23)</h3>
-        <ul>
-          <li><strong>What shipped:</strong> [End-to-end workflow working with real inputs + PostHog funnel events]</li>
-          <li><strong>What broke / changed in PRD:</strong> [Fill in]</li>
-          <li><strong>Cost & time this week:</strong> $[0.00] · [0] hours</li>
-        </ul>
-      </div>
-
-      <div class="log-entry">
-        <h3>Build 4 · Test.py: Choose Track A or Track B (Due Nov 30)</h3>
-        <ul>
-          <li><strong>Chosen track:</strong> [A: 10-case domain eval and one outside target-user review; OR B: 3–5 outside users and replay findings]</li>
-          <li><strong>Results and improvements:</strong> [Before/after evidence; for Track B, fixes to the top three friction points]</li>
-          <li><strong>PRD v4 changes:</strong> [What the evidence changed]</li>
-          <li><strong>Cost & time this week:</strong> $[0.00] · [0] hours</li>
-        </ul>
-      </div>
-
-      <div class="log-entry">
-        <h3>Build 5 · Ship.installer: Launch Ops, Rollback Check & 2-Min Video (Due Dec 7)</h3>
-        <ul>
-          <li><strong>Launch Ops & Safety:</strong> [Verified no exposed keys, set spend cap, tested 2-minute rollback]</li>
-          <li><strong>2-Minute Video & Final Polish:</strong> [Link/embed above]</li>
-          <li><strong>Cost & time this week:</strong> $[0.00] · [0] hours</li>
-        </ul>
-      </div>
-    </section>
+        <h3>Economics &amp; evidence snapshot</h3>
+        <p>Cumulative spend, cost per user run and hours: not yet recorded. Analytics and user evidence: pending. Week 6 sponsor recommendation: pending.</p>
+      </section>
+      <section id="roadmap" aria-labelledby="roadmap-title">
+        <p class="eyebrow">05 · Future roadmap</p>
+        <h2 id="roadmap-title">One useful workflow first. A broader suite over time.</h2>
+        <ol>
+          <li><strong>Build 1:</strong> Tipping guidance, additional tip calculation, equal splitting and results saved to named trips.</li>
+          <li><strong>Next:</strong> Currency conversion, including live conversion beyond Build 1.</li>
+          <li><strong>Then:</strong> Favorites and personal preferences for units and currency.</li>
+          <li><strong>Long term:</strong> The remaining utility groups in a 55-utility roadmap. Detailed group names and sequencing are pending.</li>
+        </ol>
+        <p class="meta">These are plans, not completed features or delivery promises.</p>
+      </section>
+    </main>
+    <footer>
+      <p><strong>Repository:</strong> <a href="https://github.com/building-with-ai-f26/jsd10030-utilityApp">building-with-ai-f26/jsd10030-utilityApp</a></p>
+      <p class="meta">Builder: Jiwanjot Dhaliwal · Utility Suite · Individual course project with earlier collaboration credited above.</p>
+    </footer>
   </div>
 </body>
 </html>

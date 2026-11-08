@@ -61,8 +61,8 @@ npm run preview    # Preview the production build; open the URL printed by Vite
 - Money is parsed into integer cents. Percentages support two decimal places. Tip rounds once, half up; remainder cents go to the first diners. Every person's share is shown.
 - Amounts must be non-negative, use decimal points and at most two decimal places, and cannot exceed 1,000,000 each. Tip is 0–100%; diners must be a whole number from 1–1,000. Invalid fields show errors; edited inputs clear stale results.
 - Tests cover the required $100 examples, invalid inputs, zero tip, rounding, fractional percentages and exact share totals. They do not replace browser or user testing.
-- Manual browser review: test US/UK/France source links, change currency and confirm numbers are not converted, check both $100 examples, try zero diners and negative amounts, and review keyboard focus and narrow mobile layout. Browser/user review is pending.
-- No accounts, runtime API keys, saved trips or history are implemented. Saving and history remain Sunday's work. The earlier version was built with my brother; this calculator is new individual course work.
+- Manual browser review: test US/UK/France source links, change currency and confirm numbers are not converted, check both $100 examples, try zero diners and negative amounts, and review keyboard focus and narrow mobile layout. Saturday builder checks of the $128 split, zero-diner correction and narrow layout are recorded on the Product Page. External user testing remains pending.
+- Named trips and explicitly saved calculation history are implemented locally. No accounts, cloud synchronization or runtime API keys are used. The earlier version was built with my brother; this calculator is new individual course work.
 
 ### Guidance sources
 
@@ -73,3 +73,27 @@ Reviewed November 7, 2026; these are manually maintained summaries, not live gui
 - [French Ministry of Economy / DGCCRF: Pourboire](https://www.economie.gouv.fr/dgccrf/les-fiches-pratiques/pourboire)
 
 `node_modules/`, `dist/`, `build/` and private `.env` files are already excluded by `.gitignore`. `.env.example` is a placeholder template and remains trackable. Never place private keys in browser code; this calculator needs none.
+
+### Saved trips and history
+
+1. Create a trip with a name from 1–80 characters, or select an existing trip under the result.
+2. Calculate a valid bill, then choose **Save current result**. A success message appears only after the browser accepts the write. Calculation alone never saves.
+3. Browse a trip and choose **Open details** to see the saved destination, currency, original inputs, tip, total, individual shares and timestamp.
+4. Close and reopen **http://127.0.0.1:5173/** in the same browser profile to retrieve saved details. The development server must be running.
+
+Editing any calculator input, destination or currency clears the current result and disables saving until a new valid calculation. Saved details remain read-only snapshots; later calculator changes do not alter them. Trip names are trimmed and duplicates are rejected without changing existing trips.
+
+Storage is local to the browser profile and exact origin (scheme, hostname and port). `localhost`, `127.0.0.1`, different ports, and a deployed website have separate histories. There is no cloud backup, synchronization or export. Clearing browser/site data removes history; private browsing may erase it when closed. Avoid relying on it as your only copy of important records.
+
+Storage is limited by the browser. Blocked reads, failed writes (including quota errors), invalid records and unsupported data versions show a warning without breaking calculation. Damaged data is not silently overwritten; this version has no repair or reset UI. Existing data is validated before writing, and the application does not claim success for a failed write. Simultaneous saves in multiple tabs are not coordinated; use one tab for editing trips and saving.
+
+Storage tests use an in-memory adapter and fresh store instances to check persistence, validation, snapshot independence, stale-result rejection and failures. They do not prove browser restart persistence or mobile usability.
+
+Manual browser checklist for Sunday (pending until actually performed):
+
+- Create two trips; reject blank or duplicate names. Save different calculations to each and browse their details.
+- Save the $128 example; edit each calculator input, destination and currency and confirm saving stays disabled until recalculation. Invalid calculations must not be saveable.
+- Change inputs after saving; reopen saved details and confirm the snapshot stays unchanged.
+- Refresh, then close and reopen the same URL in the same browser profile. Verify saved trip names, inputs, timestamp and all shares.
+- Start with empty history; inspect the empty state. In a disposable browser profile, test damaged or blocked local storage and verify the calculator still works and no false save success appears.
+- Check labels, keyboard operation, focus indicators and narrow layout for the new controls and history.

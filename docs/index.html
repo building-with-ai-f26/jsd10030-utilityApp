@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Utility Suite: an ad-free everyday utility collection. Course PRD, Build 1 plans and progress.">
+  <meta name="description" content="Utility Suite: an ad-free everyday utility collection.  Course PRD, Build 1 plans and progress.">
   <title>Utility Suite · Building with AI</title>
   <!-- Week 1 completed: PostHog account created November 7, 2026 on the Free plan.
        Build 2: analytics installation and event verification remain pending. -->
@@ -55,8 +55,8 @@
     <header>
       <p class="eyebrow">NYU Stern · Building with AI · Fall 2026</p>
       <h1>Utility Suite</h1>
-      <p class="lede">Everyday tools, together in one ad-free app. Starting with restaurant tipping and bill splitting for travelers.</p>
-      <p class="meta">Product Page draft · PRD v1 · Updated November 7, 2026</p>
+      <p class="lede">Everyday tools, together in one ad-free app.  Starting with restaurant tipping and bill splitting for travelers.</p>
+      <p class="meta">Product Page draft · PRD v1 · Updated November 8, 2026</p>
       <nav aria-label="Page sections">
         <a href="#prd">Read the PRD</a><a href="#status">Current status</a><a href="#prototype">Prototype evidence</a><a href="#build-log">Build log</a><a href="#roadmap">Roadmap</a>
       </nav>
@@ -67,11 +67,11 @@
         <p class="eyebrow">01 · Living product requirements</p>
         <h2 id="prd-title">PRD version 1</h2>
         <h3>The problem</h3>
-        <p>My phone has a few built-in tools, but more specific tasks usually send me to another website or app. I often have to deal with ads, features I don't need, and uncertainty about what data the app collects. If I need the result later, I may have to do the calculation again.</p>
+        <p>My phone has a few built-in tools, but more specific tasks usually send me to another website or app.  I often have to deal with ads, features I don't need, and uncertainty about what data the app collects.  If I need the result later, I may have to do the calculation again.</p>
         <h3>The product</h3>
-        <p>I want to bring useful everyday tools into one ad-free app with a consistent layout. Users will be able to pin favorites, choose preferred units and currency, and save selected results together. These are product goals; the full collection is not implemented.</p>
+        <p>I want to bring useful everyday tools into one ad-free app with a consistent layout.  Users will be able to pin favorites, choose preferred units and currency, and save selected results together.  These are product goals; the full collection is not implemented.</p>
         <h3>First user</h3>
-        <p>A classmate or friend planning an international trip who needs help calculating restaurant tips and splitting bills. A specific participant and testing session are pending.</p>
+        <p>A classmate or friend planning an international trip who needs help calculating restaurant tips and splitting bills.  A specific participant and testing session are pending.</p>
         <div class="grid">
           <div><h3>Before</h3><p>Search tipping customs, open a calculator, divide the bill and save a screenshot—or lose the result.</p></div>
           <div><h3>After · intended experience</h3><p>Check the destination guidance, calculate and split the bill, save the result to a trip and find it again later.</p></div>
@@ -82,75 +82,79 @@
         <h3>Three non-goals for Build 1</h3>
         <ol><li>Accounts and cloud synchronization.</li><li>Payments, bank connections and receipt scanning.</li><li>The complete utility catalog and live currency conversion.</li></ol>
         <h3>Riskiest assumption &amp; architecture · preliminary</h3>
-        <p>Travelers need guidance they can interpret correctly, especially when service is already included. Guidance sources have been reviewed, and automated checks cover additional tips, rounding and exact share totals. Builder checks are recorded below; external user validation is pending.</p>
-        <p><strong>Planned flow:</strong> Destination guidance + bill inputs → tip and equal split calculation → result → explicit save to a named trip → retrieval. The local calculator uses HTML/CSS and JavaScript with Vite and Node’s built-in test runner. Saving and storage design remain pending; this Product Page is separate standalone HTML/CSS.</p>
+        <p>Travelers need guidance they can interpret correctly, especially when service is already included.  Guidance sources have been reviewed, and automated checks cover additional tips, rounding and exact share totals.  Builder checks are recorded below; external user validation is pending.</p>
+        <p><strong>Implemented local flow:</strong> Destination guidance + bill inputs → tip and equal split calculation → result → explicit save to a named trip → retrieval.  The local calculator uses HTML/CSS and JavaScript with Vite and Node’s built-in test runner.  Saved snapshots use localStorage in the same browser profile and origin.  Clearing browser data removes history; private browsing may erase it when closed.  There is no cloud backup or synchronization.  This Product Page is separate standalone HTML/CSS.</p>
       </section>
       <section id="status" aria-labelledby="status-title">
         <p class="eyebrow">02 · Current implementation status</p>
         <h2 id="status-title">Tipping calculator implemented locally.</h2>
-        <p>The local prototype provides destination guidance, an editable additional tip and an exact bill split. Named trips and saved history are not implemented yet.</p>
+        <p>The local prototype provides destination guidance, an editable additional tip and an exact bill split.  Named trips, explicit saving and saved calculation history are implemented locally.</p>
         <ul>
           <li><strong>Documentation completed:</strong> PRD v1, weekend plan, Monday submission checklist and this Product Page draft.</li>
           <li><span class="badge">Implemented locally</span> US, UK (London-based) and France guidance with sources and reviewed dates; USD/GBP/EUR display without conversion; editable additional tip and integer-cent bill splitting.</li>
-          <li><span class="badge">Planned · Sunday</span> Named trips, explicit saving and retrieval of saved results/history.</li>
-          <li><span class="badge">Pending</span> Full save/retrieve workflow and external user testing.</li>
+          <li><span class="badge">Implemented locally</span> Named trips, explicit saving and retrieval of saved result snapshots, including original inputs, individual shares and timestamps.</li>
+          <li><span class="badge">Pending</span> Outside user feedback, phone testing, and Build 2 analytics installation and event verification.</li>
         </ul>
-        <p><strong>Published and verified:</strong> The Product Page and prototype screenshot are available at <a href="https://building-with-ai-f26.github.io/jsd10030-utilityApp/">https://building-with-ai-f26.github.io/jsd10030-utilityApp/</a>. The calculator runs locally.</p>
+        <p><strong>Published and verified:</strong> The Product Page and prototype screenshot are available at <a href="https://building-with-ai-f26.github.io/jsd10030-utilityApp/">https://building-with-ai-f26.github.io/jsd10030-utilityApp/</a>.  The calculator runs locally.</p>
         <h3>Earlier work &amp; individual course work</h3>
-        <p>An earlier version of Utility Suite was built with my brother. This course project is new individual work. This course’s new individual work includes the documentation and local tipping calculator. Any earlier code or assets reused later will be identified explicitly.</p>
+        <p>An earlier version of Utility Suite was built with my brother.  This course project is new individual work.  This course’s new individual work includes the documentation and local tipping calculator.  Any earlier code or assets reused later will be identified explicitly.</p>
       </section>
       <section id="prototype" aria-labelledby="prototype-title">
         <p class="eyebrow">03 · Product showcase</p>
         <h2 id="prototype-title">Prototype screenshot or GIF</h2>
         <figure class="evidence">
           <img src="assets/tipping-demo.png" width="1494" height="1860" alt="Utility Suite Travel Tipping calculator with a USD 100 subtotal, USD 8 charges, 20 percent additional tip and three diners; results show USD 20 tip, USD 128 total, and shares of USD 42.67, USD 42.67 and USD 42.66.">
-          <figcaption>Actual local calculator screenshot, November 7, 2026. A $100 subtotal + $8 charges + 20% additional tip produces a $128 total, split into $42.67, $42.67 and $42.66. Saved trips and history remain pending.</figcaption>
+          <figcaption>Actual local calculator screenshot, November 7, 2026.  A $100 subtotal + $8 charges + 20% additional tip produces a $128 total, split into $42.67, $42.67 and $42.66.  This screenshot records Saturday’s calculator; Sunday’s saved-trip workflow is shown below.</figcaption>
         </figure>
-        <p class="meta">The app may remain local through Week 4. A cloud app link and two-minute video are planned for Build 5.</p>
+        <figure class="evidence" style="margin-top:24px">
+          <img src="assets/trip-history-demo.png" width="1106" height="1288" alt="Utility Suite saved history for the Second test trip, showing a USD 100 subtotal, USD 8 charges, 25 percent tip, USD 133 total and shares of USD 44.34, USD 44.33 and USD 44.33, with saved inputs and timestamp.">
+          <figcaption>Actual local saved-trip screenshot, November 8, 2026.  The separate “Second test” trip contains a $133 result with its inputs, timestamp and individual shares.  I checked that saving this result did not change the first trip’s $128 history.</figcaption>
+        </figure>
+        <p class="meta">The app may remain local through Week 4.  A cloud app link and two-minute video are planned for Build 5.</p>
       </section>
       <section id="build-log" aria-labelledby="log-title">
         <p class="eyebrow">04 · Weekly build log</p>
         <h2 id="log-title">Build 1 · November 7–9</h2>
         <dl>
-          <dt>What works / what shipped</dt><dd>The tipping calculator is implemented locally: destination guidance, currency display, editable additional tip on the subtotal, validation and exact cent allocation. The screenshot above shows the working $128 example. Saved trips and history remain pending. The Product Page and prototype screenshot are published and verified at the public URL linked above; the calculator remains local.</dd>
+          <dt>What works / what shipped</dt><dd>I built the local tipping calculator with destination guidance, currency display, editable additional tips, validation and exact cent allocation.  I can now create named trips, explicitly save a current calculation and reopen saved details.  Saved snapshots remain independent of later input changes.  My Product Page is public; the calculator runs locally.  The Product Page includes screenshots of the calculator and saved trip history.</dd>
           <dt>Learning</dt>
           <dd>
-            <p>This was my first time using Codex. I learned how to set up my GitHub repository, connect Codex to it and use Terminal to run the app locally. I also learned how to commit changes and push them to GitHub.</p>
-            <p>Working through one task at a time helped me understand the process. I gave Codex a specific request, reviewed its proposed changes and checked the result before moving on. I’m getting more comfortable explaining what I want to build, what should stay unchanged and how to check whether it works.</p>
-            <p>I also tested the calculator myself. I checked the bill split, tried an invalid number of diners and reviewed the layout in a smaller browser window. Splitting $128 between three people showed why rounding matters: two people pay $42.67 and one pays $42.66 so the shares add up correctly.</p>
+            <p>This was my first time using Codex.  I learned how to set up my GitHub repository, connect Codex to it and use Terminal to run the app locally.  I also learned how to commit changes and push them to GitHub.</p>
+            <p>Working through one task at a time helped me understand the process.  I gave Codex a specific request, reviewed its proposed changes and checked the result before moving on.  I’m getting more comfortable explaining what I want to build, what should stay unchanged and how to check whether it works.</p>
+            <p>I also tested the calculator myself.  I checked the bill split, tried an invalid number of diners and reviewed the layout in a smaller browser window.  Splitting $128 between three people showed why rounding matters: two people pay $42.67 and one pays $42.66 so the shares add up correctly.</p>
           </dd>
-          <dt>Changes / problems</dt><dd>The 55-utility vision is narrowed to one travel dining workflow for Build 1. Calculation uses integer cents and assigns remainder cents to the first diners so the shares sum exactly. Saving and retrieval remain Sunday’s work.</dd>
-          <dt>Builder manual checks</dt><dd>Jiwanjot checked the $100 subtotal + $8 charges + 20% tip example: $20 tip, $128 total and shares of $42.67, $42.67 and $42.66. He also checked zero-diner validation, successfully recalculated after correcting the input, and visually checked the form and results in a narrow browser window.</dd>
-          <dt>Automated verification</dt><dd>The actual implementation run passed all 27 tests with Node’s built-in test runner, including both required split examples and validation errors. The Vite production build and whitespace check passed.</dd>
-          <dt>Analytics setup</dt><dd>PostHog account created on November 7, 2026 using the Free plan. Analytics installation and event verification are planned for Build 2.</dd>
-          <dt>External user testing</dt><dd>Pending — builder checks are not external user testing. No outside participant observations or feedback have been recorded.</dd>
-          <dt>Actual build costs</dt><dd>Codex token usage and any associated cost have not been confirmed. I have not incurred any other project expenses.</dd>
-          <dt>Actual hours</dt><dd>Approximately 1.5 hours on Saturday, November 7, 2026.</dd>
+          <dt>Changes / problems</dt><dd>I kept the 55-utility vision focused on one travel dining workflow for Build 1.  I used integer cents so every share adds up correctly.  I also learned that Safari’s keyboard navigation needed “Press Tab to highlight each item on a webpage” enabled before I could tab to saved details.</dd>
+          <dt>My manual browser checks</dt><dd>I verified the $128 calculation, saved it and reopened it after closing the tab.  I also checked zero-diner validation and successfully recalculated after correcting it on Saturday.  Changing the tip disabled saving until I recalculated.  I saved a $133 result to a separate trip without changing the first trip’s history.  The smaller desktop browser layout stayed readable; this was not a phone test.  Keyboard navigation to saved details worked after I enabled Safari’s “Press Tab to highlight each item on a webpage” setting.  These were my own checks.</dd>
+          <dt>Automated verification</dt><dd>I recorded Codex’s completed automated run: 41 passing tests, a successful production build and passing whitespace checks.  The tests cover the original calculation rules, saved snapshots, stale-result rejection and storage failures.  These automated checks are separate from my browser checks.</dd>
+          <dt>Analytics setup</dt><dd>I created a PostHog account on November 7, 2026 using the Free plan.  Analytics installation and event verification remain pending for Build 2.</dd>
+          <dt>Outside user feedback</dt><dd>I have not collected outside user feedback yet.  My own checks are not outside user testing.</dd>
+          <dt>Actual build costs</dt><dd>My Codex token usage and associated cost are unknown.  I have not reported any other project expenses.</dd>
+          <dt>Actual hours</dt><dd>I spent approximately 1.5 hours on Saturday, November 7, and approximately 50 minutes on Sunday, November 8, 2026.  My total so far is approximately 2 hours and 20 minutes.</dd>
         </dl>
         <h3>Before Monday's noon submission</h3>
-        <ul><li>Finish and verify the core workflow; disclose anything unfinished.</li><li>Keep the prototype evidence and learning current; add external user observations and confirm Codex usage and cost when available.</li><li>Fill in builder details and verify attribution.</li><li>Push meaningful commits on at least two separate days outside class; recheck the published Product Page after updates.</li><li>Submit the Product Page and repository URLs in Icerynk; prepare the November 10 two-minute demo.</li></ul>
+        <ul><li>Recheck the implemented core workflow and disclose remaining limits.</li><li>Keep the prototype evidence and learning current; add external user observations and confirm Codex usage and cost when available.</li><li>Recheck builder details and attribution.</li><li>Push meaningful commits on at least two separate days outside class; recheck the published Product Page after updates.</li><li>Submit the Product Page and repository URLs in Icerynk; prepare the November 10 two-minute demo.</li></ul>
         <div class="entry">
           <h3>Later course milestones · all pending</h3>
           <ul>
-            <li><strong>Build 2 · Nov 16:</strong> Smallest local version, PRD v2 and documented setup. Week 1 account creation is complete: PostHog Free plan, November 7, 2026. Analytics installation on the Product Page and local app, and event verification, remain pending for Build 2.</li>
+            <li><strong>Build 2 · Nov 16:</strong> Smallest local version, PRD v2 and documented setup.  Week 1 account creation is complete: PostHog Free plan, November 7, 2026.  Analytics installation on the Product Page and local app, and event verification, remain pending for Build 2.</li>
             <li><strong>Build 3 · Nov 23:</strong> Core workflow with real inputs and funnel events.</li>
-            <li><strong>Build 4 · Nov 30:</strong> Choose Track A (10-case domain evaluation and one outside user review) or Track B (3–5 outside users, replay findings and fixes to the top three friction points). Update PRD v4 with evidence.</li>
+            <li><strong>Build 4 · Nov 30:</strong> Choose Track A (10-case domain evaluation and one outside user review) or Track B (3–5 outside users, replay findings and fixes to the top three friction points).  Update PRD v4 with evidence.</li>
             <li><strong>Build 5 · Dec 7:</strong> Cloud launch, secret checks, spend cap, tested two-minute rollback and two-minute video.</li>
             <li><strong>Sponsor memo · Dec 14:</strong> Recommendation backed by actual usage, full costs and risks.</li>
           </ul>
-          <p class="meta">All build deadlines are noon, New York time. Later build results and changes will be logged here as work occurs.</p>
+          <p class="meta">All build deadlines are noon, New York time.  Later build results and changes will be logged here as work occurs.</p>
         </div>
         <h3>Economics &amp; evidence snapshot</h3>
-        <p>Time spent so far: approximately 1.5 hours. No other project expenses reported. Codex token usage and any associated cost remain unconfirmed. Cost per user run has not been measured. Analytics and external user evidence: pending. Builder manual checks and prototype evidence are recorded above. Week 6 sponsor recommendation: pending.</p>
+        <p>Time spent so far: approximately 2 hours and 20 minutes (Saturday: 1.5 hours; Sunday: 50 minutes).  No other project expenses reported.  Codex token usage and associated cost are unknown.  Cost per user run has not been measured.  Analytics and external user evidence: pending.  Builder manual checks and prototype evidence are recorded above.  Week 6 sponsor recommendation: pending.</p>
       </section>
       <section id="roadmap" aria-labelledby="roadmap-title">
         <p class="eyebrow">05 · Future roadmap</p>
-        <h2 id="roadmap-title">One useful workflow first. A broader suite over time.</h2>
+        <h2 id="roadmap-title">One useful workflow first.  A broader suite over time.</h2>
         <ol>
-          <li><strong>Build 1:</strong> Tipping guidance, additional tip calculation and equal splitting are implemented locally. Saving to named trips and retrieving history remain pending.</li>
+          <li><strong>Build 1:</strong> Tipping guidance, additional tip calculation and equal splitting are implemented locally.  Named trips, explicit saving and saved calculation history are also implemented locally and checked by the builder.</li>
           <li><strong>Next:</strong> Currency conversion, including live conversion beyond Build 1.</li>
           <li><strong>Then:</strong> Favorites and personal preferences for units and currency.</li>
-          <li><strong>Long term:</strong> The remaining utility groups in a 55-utility roadmap. Detailed group names and sequencing are pending.</li>
+          <li><strong>Long term:</strong> The remaining utility groups in a 55-utility roadmap.  Detailed group names and sequencing are pending.</li>
         </ol>
         <p class="meta">Beyond the local calculator described above, roadmap features remain planned; dates and details may change.</p>
       </section>

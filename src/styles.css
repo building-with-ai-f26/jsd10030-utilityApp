@@ -33,3 +33,14 @@ dt:last-of-type,dd:last-of-type { border-top:1px solid #d7e1d7; padding-top:16px
 footer { font-size:.85rem; margin-top:28px; max-width:700px; }
 @media(max-width:760px) { .layout { grid-template-columns:1fr; } .container { padding:32px 16px; } .card { padding:24px 20px; } }
 @media(max-width:420px) { .row { grid-template-columns:1fr; gap:8px; } dl { grid-template-columns:1fr; gap:4px; } dd { text-align:left; margin-bottom:12px; } dd:last-of-type { border:0; padding-top:0; } }
+.save-controls { border-top:1px solid #d7e1d7; padding-top:20px; margin-top:24px; }
+button:disabled { background:#dce5df; color:#50645a; cursor:not-allowed; }
+.trip-history { margin-top:24px; }
+.trip-history form { margin:24px 0; }
+.trip-history .row { align-items:end; }
+.trip-history .row button { margin:0; }
+#history-list { margin-top:16px; }
+.history-item { text-align:left; background:#eef5ee; color:#185c45; border:1px solid #7f9587; }
+#saved-details { border-top:1px solid #d7e1d7; margin-top:24px; padding-top:24px; }
+#saved-details ol { max-height:400px; overflow-y:auto; }
+#saved-content p, #trip-status, #save-status { overflow-wrap:anywhere; }

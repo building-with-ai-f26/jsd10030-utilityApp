@@ -1,27 +1,27 @@
 # Plan.md — Optional Risk, Architecture & Budget Draft (Build 2)
 
-This draft also tracks the Build 1 weekend. Publish the required PRD and build logs on `docs/index.html`; this file is not a separate hand-in.
+This draft also tracks the Build 1 weekend.  Publish the required PRD and build logs on `docs/index.html`; this file is not a separate hand-in.
 
 **Product:** Utility Suite
 **Build 1 due:** Monday, Nov 9, 2026 at noon, New York time
 **Build 2 due:** Monday, Nov 16, 2026 at noon, New York time
-**Builder:** [Your Name — pending]
+**Builder:** Jiwanjot Dhaliwal
 
 ## 1. What is the riskiest part?
 
-- **#1 Technical / Product Risk:** Travelers may misread destination guidance or confuse an included service charge with an additional tip. Guidance needs sources and clear limits; calculations need clear inputs, rounding and totals.
-- **Planned Build 1 checks:** Verify tip and split calculations with known examples; check zero additional tip, service charge handling, invalid inputs and uneven splits. Verify explicitly saved results can be retrieved from the correct named trip. These checks have not run yet.
-- **How Build 2 will test it:** Observe a target user using the smallest working version and verify analytics events. No results are available yet.
+- **#1 Technical / Product Risk:** Travelers may misread destination guidance or confuse an included service charge with an additional tip.  Guidance needs sources and clear limits; calculations need clear inputs, rounding and totals.
+- **Completed Build 1 checks:** The implementation run reported 41 passing tests, a successful production build and passing whitespace checks.  My browser checks covered the $128 save/reopen workflow, disabling stale saves, independent $133 history in a separate trip, a smaller desktop layout and keyboard navigation after enabling Safari’s tab-highlighting setting.  These are my own checks, not outside feedback or phone testing.
+- **How Build 2 will test it:** Observe a target user using the smallest working version and verify analytics events.  No results are available yet.
 
 ## 2. The Smallest Working Version (Architecture)
 
 - **Core workflow:** Choose destination → calculate tip → split bill → explicitly save to a named trip → retrieve saved result.
-- **Stack (Frontend / Backend / DB):** Product Page uses standalone HTML/CSS. App stack and local persistence design are pending.
-- **Planned data flow:** Destination guidance and bill inputs → additional tip and equal split calculation → result → user chooses to save to a named trip → saved result retrieval.
-- **Local run command:** App command pending. Product Page preview: open `docs/index.html` in a browser.
-- **Local URL (Build 2):** Pending app implementation.
-- **Models used (via OpenRouter or provider):** No runtime model selected; a runtime model is not required for arithmetic. Coding-agent usage and costs remain to be recorded.
-- **Attribution:** An earlier version was built with my brother. This course's new individual work currently consists of the documentation draft. Record any earlier code or assets reused later.
+- **Stack (Frontend / Backend / DB):** App: HTML/CSS and JavaScript with Vite; Node’s built-in test runner; localStorage for versioned trip snapshots.  Product Page: separate standalone HTML/CSS.
+- **Implemented local data flow:** Destination guidance and bill inputs → additional tip and equal split calculation → result → user chooses to save to a named trip → saved result retrieval.
+- **Local run command:** `npm run dev`.  Product Page preview: open `docs/index.html` in a browser.
+- **Local URL:** `http://127.0.0.1:5173/`.  Reopen the same URL in the same browser profile to retrieve saved history.
+- **Models used (via OpenRouter or provider):** No runtime model selected; a runtime model is not required for arithmetic.  Coding-agent usage and costs remain to be recorded.
+- **Attribution:** An earlier version was built with my brother.  This course’s new individual work includes the documentation, calculator and saved-trip workflow.  Record any earlier code or assets reused later.
 
 ### Completed work
 
@@ -29,50 +29,61 @@ This draft also tracks the Build 1 weekend. Publish the required PRD and build l
 - [x] Draft the Product Page with honest pending evidence labels.
 - [x] Record the weekend plan and Monday submission checklist.
 
-### Saturday, Nov 7 — planned work
+### Saturday, Nov 7 — completed work
 
-- [ ] Implement sourced restaurant tipping guidance for a clearly stated set of destinations.
-- [ ] Implement additional tip calculation and equal bill splitting with clear totals and rounding.
-- [ ] Check normal examples, service charges, zero tip and invalid inputs.
-- [ ] Preview the Product Page on desktop and mobile; revise after real prototype evidence exists.
-- [ ] Create a PostHog account for Week 1; install and verify events in Build 2.
-- [ ] Record actual learning, problems, costs and hours; make a meaningful commit when reviewed.
+- [x] Implement sourced restaurant guidance for the US, UK (London-based) and France.
+- [x] Implement additional tip calculation and equal bill splitting with clear totals and integer-cent rounding.
+- [x] Run the original 27 tests and production build; check the $128 example and zero-diner validation manually.
+- [x] Publish and verify the Product Page and calculator screenshot.
+- [x] Create a PostHog Free plan account on November 7, 2026.
+- [x] Record learning, hours and cost uncertainty; commit and push Saturday’s work.
 
-### Sunday, Nov 8 — planned work
+### Sunday, Nov 8 — completed locally
 
-- [ ] Implement named trips, explicit saving and retrieval of saved results/history.
-- [ ] Check the complete workflow, including retrieval after reopening the app; document storage limits.
-- [ ] Invite a classmate or friend to try it; record actual observations without inventing feedback.
-- [ ] Capture a real screenshot or GIF, place it under `docs/` and embed it with a relative asset path.
-- [ ] Update status, learning, problems, costs and hours from evidence.
-- [ ] Make a meaningful commit on a second separate day and push reviewed work.
+- [x] Implement named trips, explicit saving and retrieval of independent saved snapshots.
+- [x] Run 41 tests, the production build and whitespace checks successfully.
+- [x] Save the $128 result and retrieve it after closing and reopening the tab.
+- [x] Confirm that changing the tip disables saving until recalculation.
+- [x] Save a $133 result in a separate trip without changing the first trip’s history.
+- [x] Check a smaller desktop window for readability; no phone test has been performed.
+- [x] Navigate to saved details by keyboard after enabling Safari’s “Press Tab to highlight each item on a webpage” setting.
+- [x] Document local storage limits and add the actual history screenshot with a relative path.
+- [x] Update local documentation from evidence and record Sunday’s time.
+
+### Work still pending
+
+- [ ] Invite a classmate or friend to try it; record actual outside observations.
+- [ ] Test on a phone; do not count a resized desktop window as a phone test.
+- [ ] Commit and push reviewed Sunday work on a second separate day; verify the new screenshot on the public Product Page afterward.
+- [ ] Build 2: install PostHog on the Product Page and local app and verify events.  Account creation is already complete.
 
 ### Monday, Nov 9 — submission checklist (before noon, New York time)
 
-- [ ] Confirm the prototype and PRD match the stated Build 1 workflow; disclose any unfinished work.
-- [ ] Add builder details, actual screenshot/GIF, learning, problems, costs and hours.
-- [ ] Credit the earlier collaboration and identify the course's new individual work.
+- [ ] Do a final review that the prototype and PRD match the implemented workflow; disclose remaining limits.
+- [x] Record builder details, real screenshots, learning, problems, hours and cost uncertainty in the local documentation.
+- [x] Credit the earlier collaboration and identify the course’s new individual work.
 - [ ] Review for exposed secrets, check links and verify commits on at least two separate days outside class.
-- [ ] Publish GitHub Pages from `main` → `/docs`; verify the public project URL and image paths on a phone.
+- [x] Publish and verify the Product Page at `https://building-with-ai-f26.github.io/jsd10030-utilityApp/` (Saturday evidence).
+- [ ] After Sunday’s push, verify the new history screenshot at the public URL; phone testing remains pending.
 - [ ] Submit Product Page and repository URLs in Icerynk.
 - [ ] Prepare a two-minute prototype demo for Tuesday, Nov 10.
 
 ## 3. Time & Money Budget
 
-Blank values are intentional: estimates and actuals have not been supplied.
+Actual time: approximately 1.5 hours Saturday and 50 minutes Sunday, for approximately 2 hours and 20 minutes total.  Codex token usage and associated cost are unknown.  No other project expenses have been reported.  Estimates and cost per user run remain unmeasured.
 
 | Item | Estimate | Actual | Notes |
 | :--- | :--- | :--- | :--- |
-| Build budget (coding agent / APIs) | | | Pending |
-| Unit cost per user action | | | Pending architecture and measurement |
-| Hosting cost (monthly) | | | Pending |
-| Engineering time | | | Pending |
+| Build budget (coding agent / APIs) | | Unknown | Token usage and associated cost are unknown |
+| Unit cost per user action | | | Not measured |
+| Hosting cost (monthly) | | | No other project expenses reported |
+| Engineering time | | Approximately 2 hours 20 minutes | Saturday: 1.5 hours; Sunday: 50 minutes |
 
 ## 4. Security & Recovery Checklist
 
 - [ ] Verify `.env` and API keys are excluded via `.gitignore` before application work.
 - [ ] Configure spending limits or alerts where supported by any providers used.
 - [ ] Use least-privilege permissions for any external data/APIs introduced.
-- [ ] Explain local saved-data behavior and avoid automatic saving; cloud sync is outside Build 1.
+- [x] Explain same-browser and same-origin storage limits; save only on explicit action.  No cloud backup or sync.  Clearing site data removes history; private browsing may erase it when closed.  Storage failure handling is covered by automated tests.
 - [ ] Create a reviewed Git save point; add a cloud rollback path in Build 5.
 - [ ] Build 4: choose Track A (domain evaluation) or Track B (user friction) using `tests/README.md`; selection pending.

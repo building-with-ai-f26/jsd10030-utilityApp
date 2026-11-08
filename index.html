@@ -48,9 +48,33 @@
       <section class="card results" aria-labelledby="results-title" aria-live="polite" aria-atomic="true">
         <p class="eyebrow">The breakdown</p><h2 id="results-title">Your result</h2>
         <div id="result-content"><p class="muted">Enter your bill and select Calculate &amp; split to see the tip, total and each person's share.</p></div>
+        <div class="save-controls">
+          <label for="save-trip">Save to trip</label>
+          <select id="save-trip" aria-describedby="save-help"></select>
+          <button id="save-result" type="button" disabled>Save current result</button>
+          <p class="help" id="save-help">Calculate first, then explicitly save. Changing any calculator input requires a new calculation.</p>
+          <p id="save-status" role="status"></p>
+        </div>
       </section>
     </div>
-    <footer><p>Amounts are calculated in whole cents. Any leftover cents go to the first diners so shares add up exactly.</p><p>Nothing is saved yet. Named trips and history are planned for Sunday.</p></footer>
+    <section class="card trip-history" aria-labelledby="history-title">
+      <h2 id="history-title">Your trips &amp; saved results</h2>
+      <p class="help">Saved only in this browser profile at this exact address (including the port). No cloud backup or sync. Clearing browser data removes trips; private browsing may erase them when closed. Storage is limited and may be blocked or full. Use the same URL when reopening the app.</p>
+      <p id="storage-status" role="status"></p>
+      <form id="create-trip">
+        <label for="trip-name">New trip name</label>
+        <div class="row"><input id="trip-name" name="tripName" maxlength="80" required placeholder="Paris weekend"><button type="submit">Create trip</button></div>
+        <p id="trip-status" role="status"></p>
+      </form>
+      <label for="history-trip">Browse a trip</label>
+      <select id="history-trip"></select>
+      <div id="history-list"></div>
+      <section id="saved-details" aria-labelledby="saved-title" hidden>
+        <h3 id="saved-title">Saved calculation details</h3>
+        <div id="saved-content"></div>
+      </section>
+    </section>
+    <footer><p>Amounts are calculated in whole cents. Any leftover cents go to the first diners so shares add up exactly.</p><p>Results are saved only when you choose Save current result. Saved details are snapshots, independent of later calculator changes.</p></footer>
   </main>
   <script type="module" src="/src/main.js"></script>
 </body>

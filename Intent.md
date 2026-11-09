@@ -4,13 +4,13 @@ Publish the required PRD and Build 1 log on `docs/index.html`; this file is not 
 
 **Product:** Utility Suite
 **Build 1 due:** Monday, Nov 9, 2026 at noon, New York time
-**Updated:** Sunday, Nov 8, 2026
+**Updated:** Monday, Nov 9, 2026
 **Builder:** Jiwanjot Dhaliwal
 
 ## 1. Who is it for?
 
-- **Target user:** A classmate or friend planning an international trip who needs help calculating restaurant tips and splitting bills.
-- **How I will reach them to test it:** Invite a classmate or friend directly.  Outside participant and testing session are pending; I have completed my own checks, but no outside feedback has been collected.
+- **First intended user:** Simran is my first intended user and is planning a trip to Hong Kong.  I will ask Simran to try calculating, splitting, saving and reopening a result.  Feedback is still pending.
+- **Gaps to discuss:** Hong Kong tipping guidance and HKD support are not implemented.  These are gaps to discuss with Simran, not completed features or confirmed user requests.
 
 ## 2. What job does it do?
 
@@ -41,7 +41,9 @@ Three non-goals for Build 1:
 - **Local run command / screenshots:** `npm run dev`, then open `http://127.0.0.1:5173/`.  Evidence: `docs/assets/tipping-demo.png` and `docs/assets/trip-history-demo.png`.
 - **My browser checks:** I verified the $128 save/reopen workflow and a separate $133 trip.  Changing the tip disabled saving until recalculation.  A smaller desktop browser window stayed readable; I did not test a phone.  Keyboard navigation to saved details worked after I enabled Safari’s “Press Tab to highlight each item on a webpage” setting.
 - **Storage limits:** Results stay in the same browser profile and origin, with no cloud backup or sync.  Clearing site data removes history; private browsing may erase it when closed.  Storage can be blocked, damaged or full; the calculator remains usable when storage fails.
-- **Time and costs:** Saturday: approximately 1.5 hours.  Sunday: approximately 50 minutes.  Total: approximately 2 hours and 20 minutes.  Codex token usage and associated cost are unknown.  No other project expenses have been reported.
+- **Time and costs:** Saturday: approximately 1.5 hours.  Sunday: approximately 50 minutes.  Total: approximately 2 hours and 20 minutes.  Additional project spending so far: $0.  I used Codex through my existing ChatGPT Pro subscription.  I have not tracked token usage or allocated the subscription cost to this project.
 - **Analytics:** PostHog account creation is complete on the Free plan as of November 7, 2026.  Installation and event verification remain pending for Build 2.
 - **Attribution:** An earlier version was built with my brother.  This course’s new individual work includes the documentation, calculator and saved-trip workflow.  Identify any earlier code or assets reused later.
 - **Still pending:** Outside user feedback, phone testing, Sunday commit/push, and Monday submission.  Follow `Plan.md` for remaining checks.  The Product Page is public; the calculator remains local.
+
+- **November 9 learning:** November 9, 2026: I connected Codex to Icerynk and used it to review course requirements.

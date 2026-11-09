@@ -56,7 +56,7 @@
       <p class="eyebrow">NYU Stern · Building with AI · Fall 2026</p>
       <h1>Utility Suite</h1>
       <p class="lede">Everyday tools, together in one ad-free app.  Starting with restaurant tipping and bill splitting for travelers.</p>
-      <p class="meta">Product Page draft · PRD v1 · Updated November 8, 2026</p>
+      <p class="meta">Product Page draft · PRD v1 · Updated November 9, 2026</p>
       <nav aria-label="Page sections">
         <a href="#prd">Read the PRD</a><a href="#status">Current status</a><a href="#prototype">Prototype evidence</a><a href="#build-log">Build log</a><a href="#roadmap">Roadmap</a>
       </nav>
@@ -71,7 +71,8 @@
         <h3>The product</h3>
         <p>I want to bring useful everyday tools into one ad-free app with a consistent layout.  Users will be able to pin favorites, choose preferred units and currency, and save selected results together.  These are product goals; the full collection is not implemented.</p>
         <h3>First user</h3>
-        <p>A classmate or friend planning an international trip who needs help calculating restaurant tips and splitting bills.  A specific participant and testing session are pending.</p>
+        <p>Simran is my first intended user and is planning a trip to Hong Kong.  I will ask Simran to try calculating, splitting, saving and reopening a result.  Feedback is still pending.</p>
+        <p>Hong Kong tipping guidance and HKD support are not implemented.  These are gaps to discuss with Simran, not completed features or confirmed user requests.</p>
         <div class="grid">
           <div><h3>Before</h3><p>Search tipping customs, open a calculator, divide the bill and save a screenshot—or lose the result.</p></div>
           <div><h3>After · intended experience</h3><p>Check the destination guidance, calculate and split the bill, save the result to a trip and find it again later.</p></div>
@@ -123,16 +124,17 @@
             <p>Working through one task at a time helped me understand the process.  I gave Codex a specific request, reviewed its proposed changes and checked the result before moving on.  I’m getting more comfortable explaining what I want to build, what should stay unchanged and how to check whether it works.</p>
             <p>I also tested the calculator myself.  I checked the bill split, tried an invalid number of diners and reviewed the layout in a smaller browser window.  Splitting $128 between three people showed why rounding matters: two people pay $42.67 and one pays $42.66 so the shares add up correctly.</p>
           </dd>
+          <dt>November 9 learning</dt><dd>November 9, 2026: I connected Codex to Icerynk and used it to review course requirements.</dd>
           <dt>Changes / problems</dt><dd>I kept the 55-utility vision focused on one travel dining workflow for Build 1.  I used integer cents so every share adds up correctly.  I also learned that Safari’s keyboard navigation needed “Press Tab to highlight each item on a webpage” enabled before I could tab to saved details.</dd>
           <dt>My manual browser checks</dt><dd>I verified the $128 calculation, saved it and reopened it after closing the tab.  I also checked zero-diner validation and successfully recalculated after correcting it on Saturday.  Changing the tip disabled saving until I recalculated.  I saved a $133 result to a separate trip without changing the first trip’s history.  The smaller desktop browser layout stayed readable; this was not a phone test.  Keyboard navigation to saved details worked after I enabled Safari’s “Press Tab to highlight each item on a webpage” setting.  These were my own checks.</dd>
           <dt>Automated verification</dt><dd>I recorded Codex’s completed automated run: 41 passing tests, a successful production build and passing whitespace checks.  The tests cover the original calculation rules, saved snapshots, stale-result rejection and storage failures.  These automated checks are separate from my browser checks.</dd>
           <dt>Analytics setup</dt><dd>I created a PostHog account on November 7, 2026 using the Free plan.  Analytics installation and event verification remain pending for Build 2.</dd>
-          <dt>Outside user feedback</dt><dd>I have not collected outside user feedback yet.  My own checks are not outside user testing.</dd>
-          <dt>Actual build costs</dt><dd>My Codex token usage and associated cost are unknown.  I have not reported any other project expenses.</dd>
+          <dt>Outside user feedback</dt><dd>Feedback from Simran is still pending.  My own checks are not outside user testing.</dd>
+          <dt>Actual build costs</dt><dd>Additional project spending so far: $0.  I used Codex through my existing ChatGPT Pro subscription.  I have not tracked token usage or allocated the subscription cost to this project.</dd>
           <dt>Actual hours</dt><dd>I spent approximately 1.5 hours on Saturday, November 7, and approximately 50 minutes on Sunday, November 8, 2026.  My total so far is approximately 2 hours and 20 minutes.</dd>
         </dl>
         <h3>Before Monday's noon submission</h3>
-        <ul><li>Recheck the implemented core workflow and disclose remaining limits.</li><li>Keep the prototype evidence and learning current; add external user observations and confirm Codex usage and cost when available.</li><li>Recheck builder details and attribution.</li><li>Push meaningful commits on at least two separate days outside class; recheck the published Product Page after updates.</li><li>Submit the Product Page and repository URLs in Icerynk; prepare the November 10 two-minute demo.</li></ul>
+        <ul><li>Recheck the implemented core workflow and disclose remaining limits.</li><li>Keep the prototype evidence and learning current; add actual feedback from Simran when available and keep spending records current.</li><li>Recheck builder details and attribution.</li><li>Push meaningful commits on at least two separate days outside class; recheck the published Product Page after updates.</li><li>Submit the Product Page and repository URLs in Icerynk; prepare the November 10 two-minute demo.</li></ul>
         <div class="entry">
           <h3>Later course milestones · all pending</h3>
           <ul>
@@ -145,7 +147,7 @@
           <p class="meta">All build deadlines are noon, New York time.  Later build results and changes will be logged here as work occurs.</p>
         </div>
         <h3>Economics &amp; evidence snapshot</h3>
-        <p>Time spent so far: approximately 2 hours and 20 minutes (Saturday: 1.5 hours; Sunday: 50 minutes).  No other project expenses reported.  Codex token usage and associated cost are unknown.  Cost per user run has not been measured.  Analytics and external user evidence: pending.  Builder manual checks and prototype evidence are recorded above.  Week 6 sponsor recommendation: pending.</p>
+        <p>Time spent so far: approximately 2 hours and 20 minutes (Saturday: 1.5 hours; Sunday: 50 minutes).  Additional project spending so far: $0.  I used Codex through my existing ChatGPT Pro subscription.  I have not tracked token usage or allocated the subscription cost to this project.  Cost per user run has not been measured.  Analytics and external user evidence: pending.  Builder manual checks and prototype evidence are recorded above.  Week 6 sponsor recommendation: pending.</p>
       </section>
       <section id="roadmap" aria-labelledby="roadmap-title">
         <p class="eyebrow">05 · Future roadmap</p>

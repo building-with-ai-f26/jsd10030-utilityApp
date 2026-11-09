@@ -11,7 +11,9 @@ This draft also tracks the Build 1 weekend.  Publish the required PRD and build 
 
 - **#1 Technical / Product Risk:** Travelers may misread destination guidance or confuse an included service charge with an additional tip.  Guidance needs sources and clear limits; calculations need clear inputs, rounding and totals.
 - **Completed Build 1 checks:** The implementation run reported 41 passing tests, a successful production build and passing whitespace checks.  My browser checks covered the $128 save/reopen workflow, disabling stale saves, independent $133 history in a separate trip, a smaller desktop layout and keyboard navigation after enabling Safari’s tab-highlighting setting.  These are my own checks, not outside feedback or phone testing.
-- **How Build 2 will test it:** Observe a target user using the smallest working version and verify analytics events.  No results are available yet.
+- **First intended user and planned check:** Simran is my first intended user and is planning a trip to Hong Kong.  I will ask Simran to try calculating, splitting, saving and reopening a result.  Feedback is still pending.
+- **Gaps to discuss:** Hong Kong tipping guidance and HKD support are not implemented.  These are gaps to discuss with Simran, not completed features or confirmed user requests.
+- **Build 2 analytics:** Installation and event verification remain pending.
 
 ## 2. The Smallest Working Version (Architecture)
 
@@ -20,7 +22,7 @@ This draft also tracks the Build 1 weekend.  Publish the required PRD and build 
 - **Implemented local data flow:** Destination guidance and bill inputs → additional tip and equal split calculation → result → user chooses to save to a named trip → saved result retrieval.
 - **Local run command:** `npm run dev`.  Product Page preview: open `docs/index.html` in a browser.
 - **Local URL:** `http://127.0.0.1:5173/`.  Reopen the same URL in the same browser profile to retrieve saved history.
-- **Models used (via OpenRouter or provider):** No runtime model selected; a runtime model is not required for arithmetic.  Coding-agent usage and costs remain to be recorded.
+- **Models used (via OpenRouter or provider):** No runtime model selected; a runtime model is not required for arithmetic.  Codex was used through my existing ChatGPT Pro subscription; token usage is not tracked and the subscription cost has not been allocated to this project.
 - **Attribution:** An earlier version was built with my brother.  This course’s new individual work includes the documentation, calculator and saved-trip workflow.  Record any earlier code or assets reused later.
 
 ### Completed work
@@ -50,9 +52,13 @@ This draft also tracks the Build 1 weekend.  Publish the required PRD and build 
 - [x] Document local storage limits and add the actual history screenshot with a relative path.
 - [x] Update local documentation from evidence and record Sunday’s time.
 
+### Monday, Nov 9 — learning
+
+November 9, 2026: I connected Codex to Icerynk and used it to review course requirements.  No Monday time has been added to the recorded hours.
+
 ### Work still pending
 
-- [ ] Invite a classmate or friend to try it; record actual outside observations.
+- [ ] Ask Simran to calculate, split, save and reopen a result; record actual feedback.  Discuss the Hong Kong guidance and HKD gaps without treating them as confirmed requests.
 - [ ] Test on a phone; do not count a resized desktop window as a phone test.
 - [ ] Commit and push reviewed Sunday work on a second separate day; verify the new screenshot on the public Product Page afterward.
 - [ ] Build 2: install PostHog on the Product Page and local app and verify events.  Account creation is already complete.
@@ -70,13 +76,13 @@ This draft also tracks the Build 1 weekend.  Publish the required PRD and build 
 
 ## 3. Time & Money Budget
 
-Actual time: approximately 1.5 hours Saturday and 50 minutes Sunday, for approximately 2 hours and 20 minutes total.  Codex token usage and associated cost are unknown.  No other project expenses have been reported.  Estimates and cost per user run remain unmeasured.
+Actual time: approximately 1.5 hours Saturday and 50 minutes Sunday, for approximately 2 hours and 20 minutes total.  Additional project spending so far: $0.  I used Codex through my existing ChatGPT Pro subscription.  I have not tracked token usage or allocated the subscription cost to this project.  Estimates and cost per user run remain unmeasured.
 
 | Item | Estimate | Actual | Notes |
 | :--- | :--- | :--- | :--- |
-| Build budget (coding agent / APIs) | | Unknown | Token usage and associated cost are unknown |
+| Additional project spending | | $0 | Existing ChatGPT Pro subscription; subscription cost not allocated, token usage not tracked |
 | Unit cost per user action | | | Not measured |
-| Hosting cost (monthly) | | | No other project expenses reported |
+| Hosting cost (monthly) | | | No additional hosting expense reported |
 | Engineering time | | Approximately 2 hours 20 minutes | Saturday: 1.5 hours; Sunday: 50 minutes |
 
 ## 4. Security & Recovery Checklist

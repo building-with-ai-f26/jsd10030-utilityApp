@@ -28,6 +28,7 @@
     .meta { color:var(--muted); font-size:.9rem; }
     nav { display:flex; flex-wrap:wrap; gap:12px 24px; margin:28px 0; }
     nav a { font-weight:600; }
+    .open-app { display:inline-block; padding:12px 24px; border-radius:8px; background:var(--accent); color:white; font-weight:700; text-decoration:none; margin:8px 0; }
     .deadline { border-left:3px solid var(--accent); padding-left:16px; }
     main { padding-bottom:24px; }
     section { background:var(--paper); border:1px solid var(--line); border-radius:16px; padding:32px; margin-bottom:24px; scroll-margin-top:20px; }
@@ -57,6 +58,8 @@
       <h1>Utility Suite</h1>
       <p class="lede">Everyday tools, together in one ad-free app.  Starting with restaurant tipping and bill splitting for travelers.</p>
       <p class="meta">Product Page draft · PRD v1 · Updated November 9, 2026</p>
+      <a class="open-app" href="app/">Open calculator</a>
+      <p class="meta">Trips stay in your browser, with no cloud backup or sync.  Existing localhost trips do not transfer to the public app.</p>
       <nav aria-label="Page sections">
         <a href="#prd">Read the PRD</a><a href="#status">Current status</a><a href="#prototype">Prototype evidence</a><a href="#build-log">Build log</a><a href="#roadmap">Roadmap</a>
       </nav>
@@ -88,15 +91,15 @@
       </section>
       <section id="status" aria-labelledby="status-title">
         <p class="eyebrow">02 · Current implementation status</p>
-        <h2 id="status-title">Tipping calculator implemented locally.</h2>
-        <p>The local prototype provides destination guidance, an editable additional tip and an exact bill split.  Named trips, explicit saving and saved calculation history are implemented locally.</p>
+        <h2 id="status-title">Travel Tipping web prototype</h2>
+        <p>The prototype provides destination guidance, an editable additional tip, an exact bill split, named trips and explicitly saved history.  Open the web version using the link above, or run it locally for development.</p>
         <ul>
           <li><strong>Documentation completed:</strong> PRD v1, weekend plan, Monday submission checklist and this Product Page draft.</li>
           <li><span class="badge">Implemented locally</span> US, UK (London-based) and France guidance with sources and reviewed dates; USD/GBP/EUR display without conversion; editable additional tip and integer-cent bill splitting.</li>
           <li><span class="badge">Implemented locally</span> Named trips, explicit saving and retrieval of saved result snapshots, including original inputs, individual shares and timestamps.</li>
           <li><span class="badge">Pending</span> Outside user feedback, phone testing, and Build 2 analytics installation and event verification.</li>
         </ul>
-        <p><strong>Published and verified:</strong> The Product Page and prototype screenshot are available at <a href="https://building-with-ai-f26.github.io/jsd10030-utilityApp/">https://building-with-ai-f26.github.io/jsd10030-utilityApp/</a>.  The calculator runs locally.</p>
+        <p><strong>Published and verified:</strong> The Product Page and prototype screenshot are available at <a href="https://building-with-ai-f26.github.io/jsd10030-utilityApp/">https://building-with-ai-f26.github.io/jsd10030-utilityApp/</a>.  The calculator has a separate <a href="app/">web app page</a>.</p>
         <h3>Earlier work &amp; individual course work</h3>
         <p>An earlier version of Utility Suite was built with my brother.  This course project is new individual work.  This course’s new individual work includes the documentation and local tipping calculator.  Any earlier code or assets reused later will be identified explicitly.</p>
       </section>
@@ -111,13 +114,13 @@
           <img src="assets/trip-history-demo.png" width="1106" height="1288" alt="Utility Suite saved history for the Second test trip, showing a USD 100 subtotal, USD 8 charges, 25 percent tip, USD 133 total and shares of USD 44.34, USD 44.33 and USD 44.33, with saved inputs and timestamp.">
           <figcaption>Actual local saved-trip screenshot, November 8, 2026.  The separate “Second test” trip contains a $133 result with its inputs, timestamp and individual shares.  I checked that saving this result did not change the first trip’s $128 history.</figcaption>
         </figure>
-        <p class="meta">The app may remain local through Week 4.  A cloud app link and two-minute video are planned for Build 5.</p>
+        <p class="meta">November 9 publishing update: the calculator is packaged for the app/ URL on the existing GitHub Pages site.  The two-minute video and later launch checks remain planned for Build 5.</p>
       </section>
       <section id="build-log" aria-labelledby="log-title">
         <p class="eyebrow">04 · Weekly build log</p>
         <h2 id="log-title">Build 1 · November 7–9</h2>
         <dl>
-          <dt>What works / what shipped</dt><dd>I built the local tipping calculator with destination guidance, currency display, editable additional tips, validation and exact cent allocation.  I can now create named trips, explicitly save a current calculation and reopen saved details.  Saved snapshots remain independent of later input changes.  My Product Page is public; the calculator runs locally.  The Product Page includes screenshots of the calculator and saved trip history.</dd>
+          <dt>What works / what shipped</dt><dd>I built the local tipping calculator with destination guidance, currency display, editable additional tips, validation and exact cent allocation.  I can now create named trips, explicitly save a current calculation and reopen saved details.  Saved snapshots remain independent of later input changes.  The calculator and saved-trip workflow were built and checked locally on November 7–8.  The November 9 publishing update adds a web app link to my public Product Page.  The Product Page includes screenshots of the calculator and saved trip history.</dd>
           <dt>Learning</dt>
           <dd>
             <p>This was my first time using Codex.  I learned how to set up my GitHub repository, connect Codex to it and use Terminal to run the app locally.  I also learned how to commit changes and push them to GitHub.</p>

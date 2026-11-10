@@ -23,7 +23,7 @@ Publish the required PRD and Build 1 log on `docs/index.html`; this file is not 
 ## 3. What is in and out of scope?
 
 - **One core workflow:** Choose destination → calculate tip → split bill → save to trip → retrieve saved result.
-- **Build 1 scope (implemented locally):** Restaurant tipping guidance, additional tip calculation, equal bill splitting, explicit saving to a named trip and retrieval of saved results.
+- **Build 1 scope (implemented; web publishing added November 9):** Restaurant tipping guidance, additional tip calculation, equal bill splitting, explicit saving to a named trip and retrieval of saved results.
 - **Saturday, Nov 7 (completed):** Tipping guidance, calculation, equal splitting and the Product Page with a real calculator screenshot.  The Product Page is public; the calculator runs locally.
 - **Sunday, Nov 8 (completed locally):** Named trips, explicit saving and saved history.  I verified saving the $128 result, reopening it after closing the tab, stale-result prevention after changing the tip, and a separate $133 result without changing the first trip’s history.  Outside user feedback remains pending.
 - **Long-term scope:** A roadmap of 55 utilities.  Currency conversion, favorites and preferences come first, followed by the remaining utility groups; the detailed catalog is pending.
@@ -36,14 +36,16 @@ Three non-goals for Build 1:
 
 ## 4. Rough Local Prototype
 
-- **Completed:** PRD v1, the local calculator, named trips, explicit snapshot saving and retrieval, the public Product Page and Saturday screenshot.  The Sunday history screenshot is included in this local update but is not yet pushed.
+- **Completed:** PRD v1, the local calculator, named trips, explicit snapshot saving and retrieval, the public Product Page and Saturday screenshot.  Sunday’s implementation and screenshot were committed and pushed.  The November 9 publishing update adds a separate web calculator at `https://building-with-ai-f26.github.io/jsd10030-utilityApp/app/`.
 - **Automated checks:** The completed implementation run reported 41 passing tests, a successful production build and passing whitespace checks.
 - **Local run command / screenshots:** `npm run dev`, then open `http://127.0.0.1:5173/`.  Evidence: `docs/assets/tipping-demo.png` and `docs/assets/trip-history-demo.png`.
 - **My browser checks:** I verified the $128 save/reopen workflow and a separate $133 trip.  Changing the tip disabled saving until recalculation.  A smaller desktop browser window stayed readable; I did not test a phone.  Keyboard navigation to saved details worked after I enabled Safari’s “Press Tab to highlight each item on a webpage” setting.
-- **Storage limits:** Results stay in the same browser profile and origin, with no cloud backup or sync.  Clearing site data removes history; private browsing may erase it when closed.  Storage can be blocked, damaged or full; the calculator remains usable when storage fails.
+- **Storage limits:** Results stay in the same browser profile and origin, with no cloud backup or sync.  Existing localhost trips do not transfer to the public app.  Clearing site data removes history; private browsing may erase it when closed.  Storage can be blocked, damaged or full; the calculator remains usable when storage fails.
 - **Time and costs:** Saturday: approximately 1.5 hours.  Sunday: approximately 50 minutes.  Total: approximately 2 hours and 20 minutes.  Additional project spending so far: $0.  I used Codex through my existing ChatGPT Pro subscription.  I have not tracked token usage or allocated the subscription cost to this project.
 - **Analytics:** PostHog account creation is complete on the Free plan as of November 7, 2026.  Installation and event verification remain pending for Build 2.
 - **Attribution:** An earlier version was built with my brother.  This course’s new individual work includes the documentation, calculator and saved-trip workflow.  Identify any earlier code or assets reused later.
-- **Still pending:** Outside user feedback, phone testing, Sunday commit/push, and Monday submission.  Follow `Plan.md` for remaining checks.  The Product Page is public; the calculator remains local.
+- **Still pending:** Outside user feedback, public-app browser checks, phone testing and Monday submission.  Follow `Plan.md` for remaining checks.  The Product Page remains at the project root; the web calculator uses `/app/` and local development remains available.
 
 - **November 9 learning:** November 9, 2026: I connected Codex to Icerynk and used it to review course requirements.
+
+- **Publishing build:** `npm run build:pages` generates only `docs/app/` with base `/jsd10030-utilityApp/app/`; the Product Page and screenshot assets remain separate.  Check the deployed page and assets after pushing.

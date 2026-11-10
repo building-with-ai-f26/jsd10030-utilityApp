@@ -21,6 +21,8 @@ This draft also tracks the Build 1 weekend.  Publish the required PRD and build 
 - **Stack (Frontend / Backend / DB):** App: HTML/CSS and JavaScript with Vite; Node’s built-in test runner; localStorage for versioned trip snapshots.  Product Page: separate standalone HTML/CSS.
 - **Implemented local data flow:** Destination guidance and bill inputs → additional tip and equal split calculation → result → user chooses to save to a named trip → saved result retrieval.
 - **Local run command:** `npm run dev`.  Product Page preview: open `docs/index.html` in a browser.
+- **Web calculator:** `https://building-with-ai-f26.github.io/jsd10030-utilityApp/app/`.  Saved trips remain in each visitor’s browser; existing localhost trips do not transfer.
+- **Publishing build:** `npm run build:pages` replaces generated files only in `docs/app/`, using base `/jsd10030-utilityApp/app/` and the existing GitHub Pages configuration.  Keep `docs/index.html` and `docs/assets/` separate.
 - **Local URL:** `http://127.0.0.1:5173/`.  Reopen the same URL in the same browser profile to retrieve saved history.
 - **Models used (via OpenRouter or provider):** No runtime model selected; a runtime model is not required for arithmetic.  Codex was used through my existing ChatGPT Pro subscription; token usage is not tracked and the subscription cost has not been allocated to this project.
 - **Attribution:** An earlier version was built with my brother.  This course’s new individual work includes the documentation, calculator and saved-trip workflow.  Record any earlier code or assets reused later.
@@ -60,7 +62,8 @@ November 9, 2026: I connected Codex to Icerynk and used it to review course requ
 
 - [ ] Ask Simran to calculate, split, save and reopen a result; record actual feedback.  Discuss the Hong Kong guidance and HKD gaps without treating them as confirmed requests.
 - [ ] Test on a phone; do not count a resized desktop window as a phone test.
-- [ ] Commit and push reviewed Sunday work on a second separate day; verify the new screenshot on the public Product Page afterward.
+- [x] Commit and push Sunday’s implementation and evidence.
+- [ ] Verify the November 9 publishing deployment and perform public-app browser checks after pushing; preserve local test history separately.
 - [ ] Build 2: install PostHog on the Product Page and local app and verify events.  Account creation is already complete.
 
 ### Monday, Nov 9 — submission checklist (before noon, New York time)
@@ -70,7 +73,7 @@ November 9, 2026: I connected Codex to Icerynk and used it to review course requ
 - [x] Credit the earlier collaboration and identify the course’s new individual work.
 - [ ] Review for exposed secrets, check links and verify commits on at least two separate days outside class.
 - [x] Publish and verify the Product Page at `https://building-with-ai-f26.github.io/jsd10030-utilityApp/` (Saturday evidence).
-- [ ] After Sunday’s push, verify the new history screenshot at the public URL; phone testing remains pending.
+- [ ] Verify the public Product Page, calculator at `/app/`, required assets and history screenshot after the publishing deployment; phone testing remains pending.
 - [ ] Submit Product Page and repository URLs in Icerynk.
 - [ ] Prepare a two-minute prototype demo for Tuesday, Nov 10.
 

@@ -4,8 +4,9 @@
 
 - **Builder:** [Your Name] (`@github-handle`)
 - **Pod:** [Pod Name / Number]
-- **Product Page & Living PRD:** [Add your GitHub Pages URL]
-- **App:** runs locally through Week 4; add a cloud URL in Build 5.
+- **Product Page & Living PRD:** https://building-with-ai-f26.github.io/jsd10030-utilityApp/
+- **Calculator web prototype:** https://building-with-ai-f26.github.io/jsd10030-utilityApp/app/
+- **Development:** the same calculator can still run locally with Vite.
 
 ## Start here: Build 1
 
@@ -79,7 +80,7 @@ Reviewed November 7, 2026; these are manually maintained summaries, not live gui
 1. Create a trip with a name from 1–80 characters, or select an existing trip under the result.
 2. Calculate a valid bill, then choose **Save current result**. A success message appears only after the browser accepts the write. Calculation alone never saves.
 3. Browse a trip and choose **Open details** to see the saved destination, currency, original inputs, tip, total, individual shares and timestamp.
-4. Close and reopen **http://127.0.0.1:5173/** in the same browser profile to retrieve saved details. The development server must be running.
+4. Close and reopen the same app URL in the same browser profile to retrieve saved details. For local development, use **http://127.0.0.1:5173/** with the server running; for the public prototype, use **https://building-with-ai-f26.github.io/jsd10030-utilityApp/app/**.
 
 Editing any calculator input, destination or currency clears the current result and disables saving until a new valid calculation. Saved details remain read-only snapshots; later calculator changes do not alter them. Trip names are trimmed and duplicates are rejected without changing existing trips.
 
@@ -97,3 +98,20 @@ Manual browser checklist for Sunday (pending until actually performed):
 - Refresh, then close and reopen the same URL in the same browser profile. Verify saved trip names, inputs, timestamp and all shares.
 - Start with empty history; inspect the empty state. In a disposable browser profile, test damaged or blocked local storage and verify the calculator still works and no false save success appears.
 - Check labels, keyboard operation, focus indicators and narrow layout for the new controls and history.
+
+## Publish the calculator on the existing GitHub Pages site
+
+The course Product Page stays at the project root URL.  The calculator lives under `/jsd10030-utilityApp/app/`.  Saved trips remain in each visitor’s browser profile and origin; existing localhost trips do not transfer to the public app.  There is no cloud storage or synchronization, and clearing browser data can remove history.
+
+```bash
+npm ci
+npm test
+npm run build
+npm run build:pages
+```
+
+`npm run build` still creates `dist/` with relative asset URLs.  `npm run build:pages` uses `vite.publish.config.js`, sets the deployment base to `/jsd10030-utilityApp/app/`, and replaces only the generated files inside `docs/app/`.  Keep that directory generated-only; edit calculator source files instead.  It does not empty `docs/`, change `docs/index.html`, or replace screenshots in `docs/assets/`.  The publishing config disables public-directory copying and `.env` file loading; this app requires no secrets or analytics.
+
+After calculator changes, rebuild and review `docs/app/`, then commit the generated HTML/assets together with the source changes and push to `origin/main`.  The existing GitHub Pages deployment serves `/docs`; no Pages settings changes are needed.  Verify both the Product Page and `/app/` URL plus their assets after deployment before treating a push as a completed publication.
+
+The November 7–8 manual checks above were on the local app.  Repeat calculation, save/reopen, stale-result prevention, keyboard navigation and phone checks on the public URL; earlier local checks do not establish browser behavior on the deployed app.

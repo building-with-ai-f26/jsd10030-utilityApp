@@ -12,15 +12,15 @@ This draft also tracks the Build 1 weekend.  Publish the required PRD and build 
 - **#1 Technical / Product Risk:** Travelers may misread destination guidance or confuse an included service charge with an additional tip.  Guidance needs sources and clear limits; calculations need clear inputs, rounding and totals.
 - **Completed Build 1 checks:** The implementation run reported 41 passing tests, a successful production build and passing whitespace checks.  My browser checks covered the $128 save/reopen workflow, disabling stale saves, independent $133 history in a separate trip, a smaller desktop layout and keyboard navigation after enabling Safari’s tab-highlighting setting.  These are my own checks, not outside feedback or phone testing.
 - **First intended user and planned check:** Simran is my first intended user and is planning a trip to Hong Kong.  I will ask Simran to try calculating, splitting, saving and reopening a result.  Feedback is still pending.
-- **Gaps to discuss:** Hong Kong tipping guidance and HKD support are not implemented.  These are gaps to discuss with Simran, not completed features or confirmed user requests.
-- **Build 2 analytics:** Installation and event verification remain pending.
+- **Gaps to discuss:** HKD is supported as a conversion target.  Hong Kong tipping guidance and HKD bill input are not implemented.  These remaining gaps are topics to discuss with Simran, not confirmed user requests.
+- **Build 2 analytics:** Installed on both pages and deployed.  I observed pageviews, ui_clicked, calculation_succeeded, conversion_succeeded and result_saved locally, and previously observed saved_details_opened locally before By person was added.  PostHog also received events from the public calculator URL.  The public replay played with visible inputs and saved content masked.  Receipt of conversion_failed remains pending.  The November 15 PostHog screenshot specifically confirms public ui_clicked, saved_details_opened, result_saved, conversion_succeeded and calculation_succeeded.  Other event checks remain pending.
 
 ## 2. The Smallest Working Version (Architecture)
 
 - **Core workflow:** Choose destination → calculate tip → split bill → explicitly save to a named trip → retrieve saved result.
 - **Stack (Frontend / Backend / DB):** App: HTML/CSS and JavaScript with Vite; Node’s built-in test runner; localStorage for versioned trip snapshots.  Product Page: separate standalone HTML/CSS.
-- **Implemented local data flow:** Destination guidance and bill inputs → additional tip and equal split calculation → result → user chooses to save to a named trip → saved result retrieval.
-- **Local run command:** `npm run dev`.  Product Page preview: open `docs/index.html` in a browser.
+- **Implemented data flow:** Destination guidance and bill inputs → additional tip and Equal or By person calculation → result → optional whole-total reference-rate conversion → explicit save of the original calculation to a named trip → saved result retrieval.
+- **Local run command:** `npm run dev`.  Product Page preview: `http://127.0.0.1:5173/docs/index.html` (use HTTP so the analytics module loads).
 - **Web calculator:** `https://building-with-ai-f26.github.io/jsd10030-utilityApp/app/`.  Saved trips remain in each visitor’s browser; existing localhost trips do not transfer.
 - **Publishing build:** `npm run build:pages` replaces generated files only in `docs/app/`, using base `/jsd10030-utilityApp/app/` and the existing GitHub Pages configuration.  Keep `docs/index.html` and `docs/assets/` separate.
 - **Local URL:** `http://127.0.0.1:5173/`.  Reopen the same URL in the same browser profile to retrieve saved history.
@@ -32,6 +32,20 @@ This draft also tracks the Build 1 weekend.  Publish the required PRD and build 
 - [x] Draft PRD v1 and define Build 1 scope and three non-goals.
 - [x] Draft the Product Page with honest pending evidence labels.
 - [x] Record the weekend plan and Monday submission checklist.
+
+### Build 2 — completed and remaining evidence
+
+- [x] Implement PRD v2 and Anirudh’s smaller requested response: per-person subtotals, proportional charges/tip, exact-cent allocation and backward-compatible snapshots.
+- [x] Implement separate whole-total Frankfurter conversion and PostHog on both pages.
+- [x] Record the implementation run: 106 passing tests, successful production/publishing builds, HTML and whitespace checks.
+- [x] Push and deploy commit `9f87215`; check both public pages and required assets.
+- [x] Record public browser observations: My public browser checks produced shares of $38.40 and $89.60.  USD 128 converted to an estimated EUR 115.56 during the observed test; later estimates may differ with the reference rate.  The “Live test” saved result reopened with By person mode and its complete breakdown.
+- [x] Record public event receipt and playable replay with visible inputs and saved content masked; saved_details_opened was previously observed locally.
+- [ ] Observe conversion_failed receipt; complete remaining mode-change, zero/invalid individual-input, old-history, keyboard/phone, exhaustive privacy and analytics-failure checks.
+- [x] Four November 15 Build 2 screenshots are included: the By person result (70/30 diner order), the Frankfurter conversion with rate/date, reopened “Live test” details, and PostHog event receipt from the public calculator.  The November 7–8 images remain historical Build 1 evidence.  The PostHog screenshot does not show replay playback or conversion_failed receipt; those statuses are recorded separately.
+- [ ] Submit Build 2 in Icerynk; no submission has been made in this work.
+
+**API and cost model:** The calculator requests a currency-pair reference rate from Frankfurter v2 and computes the estimate in the browser; it does not send bill amounts or trip names.  The public API is free and requires no key or account.  Its official documentation states no daily/monthly quotas, with rate limiting to prevent abuse.  Reference rates are not live market quotes or guaranteed card/cash rates; availability is not guaranteed.  No paid API plan was enabled.  [Official documentation](https://frankfurter.dev/).  USD/GBP/EUR bill selection remains display-only; conversion is separate, with USD/GBP/EUR/HKD targets.  Conversion estimates are not saved.  PostHog uses the previously created Free plan account; usage/billing limits should be checked before broader testing.  Recorded development spending is $27 in Codex credits on November 15; it is separate from runtime API costs and the unallocated ChatGPT Pro subscription.
 
 ### Saturday, Nov 7 — completed work
 
@@ -60,11 +74,11 @@ November 9, 2026: I connected Codex to Icerynk and used it to review course requ
 
 ### Work still pending
 
-- [ ] Ask Simran to calculate, split, save and reopen a result; record actual feedback.  Discuss the Hong Kong guidance and HKD gaps without treating them as confirmed requests.
+- [ ] Ask Simran to calculate, split, save and reopen a result; record actual feedback.  Discuss the missing Hong Kong guidance and HKD bill-input gaps without treating them as confirmed requests.
 - [ ] Test on a phone; do not count a resized desktop window as a phone test.
 - [x] Commit and push Sunday’s implementation and evidence.
-- [ ] Verify the November 9 publishing deployment and perform public-app browser checks after pushing; preserve local test history separately.
-- [ ] Build 2: install PostHog on the Product Page and local app and verify events.  Account creation is already complete.
+- [x] Verify the publishing deployment; Build 2 deployment and the specific public browser observations are recorded above, separately from local history.
+- [x] Build 2: install PostHog on the Product Page and calculator.  Partial event/replay observations are recorded above; remaining checks stay pending.
 
 ### Monday, Nov 9 — submission checklist (before noon, New York time)
 
@@ -73,20 +87,20 @@ November 9, 2026: I connected Codex to Icerynk and used it to review course requ
 - [x] Credit the earlier collaboration and identify the course’s new individual work.
 - [ ] Review for exposed secrets, check links and verify commits on at least two separate days outside class.
 - [x] Publish and verify the Product Page at `https://building-with-ai-f26.github.io/jsd10030-utilityApp/` (Saturday evidence).
-- [ ] Verify the public Product Page, calculator at `/app/`, required assets and history screenshot after the publishing deployment; phone testing remains pending.
+- [x] Verify the deployed Product Page, calculator at `/app/`, required assets and historical screenshots.  Phone testing remains pending.
 - [ ] Submit Product Page and repository URLs in Icerynk.
 - [ ] Prepare a two-minute prototype demo for Tuesday, Nov 10.
 
 ## 3. Time & Money Budget
 
-Actual time: approximately 1.5 hours Saturday and 50 minutes Sunday, for approximately 2 hours and 20 minutes total.  Additional project spending so far: $0.  I used Codex through my existing ChatGPT Pro subscription.  I have not tracked token usage or allocated the subscription cost to this project.  Estimates and cost per user run remain unmeasured.
+Recorded active project time: approximately 1.5 hours November 7, 50 minutes November 8, and 2 hours Sunday, November 15, 2026: 4 hours 20 minutes total.  Recorded project spending: $27 for Codex credits used for development on November 15.  This is development spending, not a per-user-run API cost.  My existing ChatGPT Pro subscription remains separate and unallocated to this project.  Token usage has not been measured.  Runtime API cost per user run remains unmeasured; Frankfurter uses its free public API.
 
 | Item | Estimate | Actual | Notes |
 | :--- | :--- | :--- | :--- |
-| Additional project spending | | $0 | Existing ChatGPT Pro subscription; subscription cost not allocated, token usage not tracked |
+| Recorded development spending | | $27 | November 15 Codex credits; Pro subscription separate and unallocated; token usage unmeasured |
 | Unit cost per user action | | | Not measured |
 | Hosting cost (monthly) | | | No additional hosting expense reported |
-| Engineering time | | Approximately 2 hours 20 minutes | Saturday: 1.5 hours; Sunday: 50 minutes |
+| Engineering time | | 4 hours 20 minutes | Nov 7: approximately 1.5 hours; Nov 8: approximately 50 minutes; Nov 15: 2 hours |
 
 ## 4. Security & Recovery Checklist
 

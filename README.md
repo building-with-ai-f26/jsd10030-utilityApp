@@ -20,7 +20,7 @@
 6. Push meaningful commits on **at least two separate days each week outside class**, including the November 3 break.
 7. Submit your **Product Page URL and repository URL in Icerynk**. Come ready to demo the prototype in two minutes on November 10.
 
-Create your PostHog account in Week 1. Install it on the Product Page and local app in **Build 2**, then verify events. The Product Page is public from Build 1; the app can stay local through Week 4.
+Historical Build 1 instructions are retained above.  The PostHog Free plan account was created November 7.  Build 2 conversion, analytics and By person splits are now deployed in commit `9f87215`; submission remains pending.
 
 ## Repository map
 
@@ -40,7 +40,7 @@ Requires Node.js 22.12+ (or a newer supported release) and npm. From Terminal:
 
 ```bash
 cd ~/Desktop/jsd10030-utilityApp
-npm install
+npm ci
 npm run dev
 ```
 
@@ -63,7 +63,7 @@ npm run preview    # Preview the production build; open the URL printed by Vite
 - Amounts must be non-negative, use decimal points and at most two decimal places, and cannot exceed 1,000,000 each. Tip is 0–100%; diners must be a whole number from 1–1,000. Invalid fields show errors; edited inputs clear stale results.
 - Tests cover the required $100 examples, invalid inputs, zero tip, rounding, fractional percentages and exact share totals. They do not replace browser or user testing.
 - Manual browser review: test US/UK/France source links, change currency and confirm numbers are not converted, check both $100 examples, try zero diners and negative amounts, and review keyboard focus and narrow mobile layout. Saturday builder checks of the $128 split, zero-diner correction and narrow layout are recorded on the Product Page. Anirudh’s feedback is recorded in PRD v2; Simran’s feedback and remaining user checks are pending.
-- Named trips and explicitly saved calculation history are implemented locally. No accounts, cloud synchronization or runtime API keys are used. The earlier version was built with my brother; this calculator is new individual course work.
+- Named trips and explicitly saved calculation history are implemented in the public and local app. No accounts, cloud synchronization or private runtime API keys are used. The earlier version was built with my brother; this calculator is new individual course work.
 
 ### Guidance sources
 
@@ -110,19 +110,19 @@ npm run build
 npm run build:pages
 ```
 
-`npm run build` still creates `dist/` with relative asset URLs.  `npm run build:pages` uses `vite.publish.config.js`, sets the deployment base to `/jsd10030-utilityApp/app/`, and replaces only the generated files inside `docs/app/`.  Keep that directory generated-only; edit calculator source files instead.  It does not empty `docs/`, change `docs/index.html`, or replace screenshots in `docs/assets/`.  The publishing config disables public-directory copying and `.env` file loading; this app requires no private credentials.  PostHog is now configured using the owner-supplied public ingestion token; dashboard verification remains pending.
+`npm run build` still creates `dist/` with relative asset URLs.  `npm run build:pages` uses `vite.publish.config.js`, sets the deployment base to `/jsd10030-utilityApp/app/`, and replaces only the generated files inside `docs/app/`.  Keep that directory generated-only; edit calculator source files instead.  It does not empty `docs/`, change `docs/index.html`, or replace screenshots in `docs/assets/`.  The publishing config disables public-directory copying and `.env` file loading; this app requires no private credentials.  PostHog is now configured using the owner-supplied public ingestion token; public calculator events and a playable masked replay have been observed; remaining checks are listed below.
 
 After calculator changes, rebuild and review `docs/app/`, then commit the generated HTML/assets together with the source changes and push to `origin/main`.  The existing GitHub Pages deployment serves `/docs`; no Pages settings changes are needed.  Verify both the Product Page and `/app/` URL plus their assets after deployment before treating a push as a completed publication.
 
-The November 7–8 manual checks above were on the local app.  Repeat calculation, save/reopen, stale-result prevention, keyboard navigation and phone checks on the public URL; earlier local checks do not establish browser behavior on the deployed app.
+The November 7–8 manual checks above were on the local app.  The confirmed public checks are recorded below.  Public stale-result prevention, keyboard navigation, phone checks and other unperformed checks remain pending; earlier local checks do not establish those deployed behaviors.
 
-## Convert a calculated total — local implementation
+## Convert a calculated total — published Build 2 feature
 
 The bill currency selector still changes display only.  After calculating a valid bill, choose a separate target currency (USD, GBP, EUR or HKD) under **Convert total · reference-rate estimate**, then select **Convert total**.  The target must differ from the original currency.  HKD is a conversion target only; Hong Kong tipping guidance and HKD bill input are not added by this feature.
 
 The result shows the original total, converted estimate, currency codes, exchange rate and provider’s rate date.  The latest published reference rate can predate today, especially on weekends or holidays; it is not a live market quote.  Actual card or cash rates and fees may differ.  Converted amounts round once to two decimal places.  Original tip calculations, equal splits and saved snapshots are unchanged; conversion estimates are not saved.
 
-Provider: [Frankfurter v2](https://frankfurter.dev/).  Official documentation reviewed November 15, 2026 describes a free public API without an API key and [open CORS for browser requests](https://frankfurter.dev/javascript/).  The [currency catalog](https://frankfurter.dev/currencies/) includes all four offered targets.  This implementation uses no credentials, account, paid plan, SDK or new dependencies.  Free access does not guarantee availability; do not assume unlimited capacity or an uptime commitment.  No paid service was enabled.
+Provider: [Frankfurter v2](https://frankfurter.dev/).  Official documentation reviewed November 15, 2026 describes a free public API without an API key and [open CORS for browser requests](https://frankfurter.dev/javascript/).  The [currency catalog](https://frankfurter.dev/currencies/) includes all four offered targets.  This implementation uses no credentials, account, paid plan, SDK or new dependencies.  Official documentation states no daily/monthly quotas, with rate limiting to prevent abuse.  Free access does not guarantee availability or an uptime commitment.  No paid service was enabled.
 
 Requests use `https://api.frankfurter.dev/v2/rate/{base}/{quote}` and send the currency pair only, not the bill amount or trip names.  The provider receives normal connection metadata such as IP address.  The app has no embedded fallback rates.  Missing rates, malformed responses, timeouts (10 seconds), offline failures and service errors show a message instead of an estimate.  Editing calculator inputs or selecting another target clears the estimate and cancels/discards outdated requests.  Network failure does not block ordinary calculation or trip saving.
 
@@ -142,9 +142,9 @@ npm run dev
 7. Save a normal trip result, then reopen it.  The original currency and calculation should remain unchanged; no conversion estimate should be stored.
 8. Turn the browser offline and request conversion again.  Expect an honest error without a rate or estimate; the calculator and trips should remain usable.  Restore internet access afterward.
 
-Run `npm test` for deterministic tests (API responses in tests are synthetic fixtures, never runtime fallback rates) and `npm run build` for the production build.  Browser interaction checks remain manual; an HTTP connectivity/CORS check alone does not prove the complete browser workflow.  The conversion feature has not been published in this step.
+Run `npm test` for deterministic tests (API responses in tests are synthetic fixtures, never runtime fallback rates) and `npm run build` for the production build.  Browser interaction checks remain manual; an HTTP connectivity/CORS check alone does not prove the complete browser workflow.  Conversion is published in commit `9f87215`.  The observed public USD 128 → EUR 115.56 estimate is a historical test result, not a fixed rate promise.
 
-## Build 2 PostHog — installed locally, partial verification
+## Build 2 PostHog — deployed, partial observed verification
 
 The standalone Product Page and calculator share `docs/assets/analytics.js`, using the exact owner-supplied project token and `https://us.i.posthog.com` host.  This is the public browser ingestion token, not a private API credential; its inclusion is explicitly authorized by the project owner.  Never add a personal API key to browser code.  The official bootstrap loads the SDK asynchronously without an npm dependency.  A page-level guard prevents duplicate initialization/pageviews.  Calculator code imports the same module, which Vite bundles for production; the Product Page loads it by relative URL.  Existing saved trips and the conversion feature are preserved.
 
@@ -188,7 +188,7 @@ Use HTTP rather than opening the Product Page as a `file://` URL: browser module
 6. Stay on each page for longer than the dashboard minimum recording duration; click/scroll and interact with forms, then navigate or wait for uploads.  Find the local session under **Session Replay**, open it and confirm it plays.  Verify typed values, trip selectors/names, displayed bills/conversions, saved details and screenshot figures are masked/blocked.  The visible page in your browser should remain unchanged; masking applies to captured replay only.
 7. Test SDK failure by blocking `us-assets.i.posthog.com` and reloading, then confirm calculations, conversion and existing trips still work.  Restore access afterward.  Do not clear all localStorage to troubleshoot analytics: it contains saved trips too.
 
-**Verification status: PARTIAL, based on the builder’s observations.**  PostHog received pageviews, `ui_clicked`, `calculation_succeeded`, `conversion_succeeded` and `result_saved`; a replay opened with masked content.  Receipt of `saved_details_opened` and `conversion_failed`, and masking for the new By person fields/breakdown, remain unverified.  Automated tests validate configuration, allowlists and failure guards but do not prove dashboard delivery.  Public-site checks must be repeated only after a separately authorized deployment; nothing was published in this step.
+**Verification status: PARTIAL, based on the builder’s observations.**  I observed pageviews, ui_clicked, calculation_succeeded, conversion_succeeded and result_saved locally, and previously observed saved_details_opened locally before By person was added.  PostHog also received events from the public calculator URL.  The public replay played with visible inputs and saved content masked.  Receipt of conversion_failed remains pending.  The November 15 PostHog screenshot specifically confirms public ui_clicked, saved_details_opened, result_saved, conversion_succeeded and calculation_succeeded.  Other event checks remain pending.  Automated tests validate configuration, allowlists and failure guards but do not prove dashboard delivery.  Exhaustive privacy/event-property inspection, failure isolation and duplicate-pageview checks remain pending unless separately recorded.
 
 Build checks without changing the checked-in published app:
 
@@ -198,7 +198,7 @@ npm run build
 npm run build:pages -- --outDir /tmp/utility-posthog-pages-check --emptyOutDir
 ```
 
-## By person splitting — local Build 2 implementation
+## By person splitting — published Build 2 implementation
 
 **Equal split** remains the default.  Select **By person** and use the diner count to generate Diner 1, Diner 2, etc.  Enter each diner’s combined item subtotal in the original bill currency.  These subtotals must sum exactly to the bill subtotal.  Zero is valid for an individual diner; the combined subtotal must be positive.  Negative, blank, non-numeric and fractional-cent amounts are rejected.
 
@@ -206,7 +206,7 @@ The tip is still calculated and rounded once on the bill subtotal.  Charges and 
 
 New saved records include a version-2 snapshot marker, explicit split mode and (for By person) the individual subtotals and breakdown.  The existing storage key/envelope is retained.  Old records without a split mode are treated as Equal splits and remain unchanged on read.  This is backward compatibility in the new app; do not expect an old deployed app build to understand newly saved By person records.  No browser data is deleted or reset.
 
-The new subtotal section and result/history containers are private replay regions.  PostHog events still send only fixed event/action codes and environment/surface labels, never names or amounts.  Editing the mode or a diner subtotal clears stale results/conversion and disables saving until a new valid calculation.  The previously observed PostHog events/replay do not verify masking for these new fields; check them manually.
+The new subtotal section and result/history containers are private replay regions.  PostHog events still send only fixed event/action codes and environment/surface labels, never names or amounts.  Editing the mode or a diner subtotal clears stale results/conversion and disables saving until a new valid calculation.  The public replay was observed playing with visible inputs and saved content masked.  Exhaustive checks of every dynamic field and event property remain pending.
 
 ### Local By person browser observations — completed
 
@@ -216,9 +216,9 @@ The builder reported these checks passed:
 - The saved result reopened under “Second test,” retaining By person mode and the complete breakdown.
 - Subtotals 30/60 against bill subtotal 100 showed the correct mismatch error.
 
-Other manual checks remain pending; the steps below include the completed examples for reproduction and do not imply that every step passed.  Recorded hours and costs are unchanged; no time for this session has been supplied.
+Other manual checks remain pending; the steps below include the completed examples for reproduction and do not imply that every step passed.  Recorded time and development spending are updated in the summary below.
 
-### Browser checklist — only the three observations above are confirmed
+### Browser checklist — completed observations are recorded separately
 
 1. Run `npm run dev` and open `http://127.0.0.1:5173/`.
 2. Keep USD, enter bill subtotal `100`, charges `8`, tip `20`, diners `2`; select **By person** and enter Diner 1 `30`, Diner 2 `70`.  Calculate.
@@ -226,6 +226,14 @@ Other manual checks remain pending; the steps below include the completed exampl
 4. Enter `60` for Diner 2 and calculate: expect a subtotal-sum error and no saveable result.  Test a blank, negative and three-decimal amount.  Test zero for both diners with bill subtotal zero: By person must reject the zero combined subtotal.  For a valid zero share, restore bill subtotal 100 and use `0` and `100`.
 5. Restore `30` and `70`, calculate and convert the USD 128 whole total if desired.  Switch to Equal split: old result and conversion must clear.  Recalculate to get USD 64.00 each.  Switch back and recalculate By person.
 6. Create/select a disposable trip and explicitly save the By person result.  Close the tab, reopen the same URL in the same browser profile, select the trip and open details.  Confirm the saved By person label and all component amounts.  Change current inputs and confirm the saved snapshot stays unchanged.  Open an older Equal result too.
-7. Check the new fields and breakdown in a smaller window and with the keyboard.  In PostHog, verify they are masked/blocked in the replay and absent from event properties.  This remains pending; no phone test is implied.
+7. Check the new fields and breakdown in a smaller window and with the keyboard.  In PostHog, inspect each dynamic field/breakdown and event properties.  The public masked replay observation is recorded above; this exhaustive inspection and keyboard/phone checks remain pending.
 
-PRD v2 and the Build 2 log are in `docs/index.html`.  Recorded hours are unchanged.  This local update has not been published or submitted.
+### Public deployment and browser observations
+
+Commit `9f87215` was pushed and deployed.  The Product Page contains PRD v2 and the Build 2 log; the calculator contains By person splitting and conversion.  Required JavaScript, CSS and analytics assets passed deployment checks.  These HTTP/content checks are distinct from the builder’s browser observations:
+
+My public browser checks produced shares of $38.40 and $89.60.  USD 128 converted to an estimated EUR 115.56 during the observed test; later estimates may differ with the reference rate.  The “Live test” saved result reopened with By person mode and its complete breakdown.
+
+Four November 15 Build 2 screenshots are included: the By person result (70/30 diner order), the Frankfurter conversion with rate/date, reopened “Live test” details, and PostHog event receipt from the public calculator.  The November 7–8 images remain historical Build 1 evidence.  The PostHog screenshot does not show replay playback or conversion_failed receipt; those statuses are recorded separately.
+
+PRD v2 and the Build 2 log are in `docs/index.html`.  Submission remains pending.  Recorded active project time: approximately 1.5 hours November 7, 50 minutes November 8, and 2 hours Sunday, November 15, 2026: 4 hours 20 minutes total.  Recorded project spending: $27 for Codex credits used for development on November 15.  This is development spending, not a per-user-run API cost.  My existing ChatGPT Pro subscription remains separate and unallocated to this project.  Token usage has not been measured.  Runtime API cost per user run remains unmeasured; Frankfurter uses its free public API.

@@ -44,3 +44,12 @@ button:disabled { background:#dce5df; color:#50645a; cursor:not-allowed; }
 #saved-details { border-top:1px solid #d7e1d7; margin-top:24px; padding-top:24px; }
 #saved-details ol { max-height:400px; overflow-y:auto; }
 #saved-content p, #trip-status, #save-status { overflow-wrap:anywhere; }
+
+.conversion-controls { border-top:1px solid #d7e1d7; padding-top:20px; margin-top:24px; }
+#conversion-status { overflow-wrap:anywhere; margin-top:16px; }
+#conversion-status p { margin-bottom:10px; }
+
+#person-subtotals { border:1px solid #7f9587; border-radius:8px; margin:20px 0; padding:16px; min-width:0; }
+#person-subtotals legend { font-weight:600; padding:0 6px; }
+#person-fields { max-height:480px; overflow-y:auto; padding:4px; }
+.results li { overflow-wrap:anywhere; }

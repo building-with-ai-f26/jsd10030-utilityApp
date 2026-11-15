@@ -10,13 +10,22 @@ function normalizedInputs(inputs) {
     throw new Error('Choose a supported destination and currency.');
   }
   if (!inputKeys.every(key => typeof inputs[key] === 'string')) throw new Error('Calculation inputs are invalid.');
-  return Object.fromEntries(inputKeys.map(key => [key, inputs[key]]));
+  const clean = Object.fromEntries(inputKeys.map(key => [key, inputs[key]]));
+  if (inputs.splitMode !== undefined) {
+    if (!['equal', 'by_person'].includes(inputs.splitMode)) throw new Error('Invalid split mode.');
+    clean.splitMode = inputs.splitMode;
+    if (inputs.splitMode === 'by_person') {
+      if (!Array.isArray(inputs.personSubtotals) || !inputs.personSubtotals.every(value => typeof value === 'string')) throw new Error('Diner subtotals are invalid.');
+      clean.personSubtotals = [...inputs.personSubtotals];
+    }
+  }
+  return clean;
 }
 export function prepareCalculation(inputs) {
   const clean = normalizedInputs(inputs);
   const result = calculate(clean);
   if (Object.keys(result.errors).length) throw new Error('Calculate a valid result before saving.');
-  return { inputs: clone(clean), result: Object.fromEntries(resultKeys.map(key => [key, clone(result[key])])) };
+  return { inputs: clone(clean), result: Object.fromEntries([...resultKeys, ...(clean.splitMode === 'by_person' ? ['breakdown'] : [])].map(key => [key, clone(result[key])])) };
 }
 export function isCurrent(calculation, inputs) {
   if (!calculation) return false;
@@ -37,7 +46,11 @@ function validate(data) {
         typeof saved.savedAt !== 'string' || !Number.isFinite(Date.parse(saved.savedAt))) invalid();
     try {
       const expected = prepareCalculation(saved.inputs);
-      if (!resultKeys.every(key => JSON.stringify(saved.result?.[key]) === JSON.stringify(expected.result[key]))) invalid();
+      const mode = expected.inputs.splitMode ?? 'equal';
+      const isLegacy = saved.snapshotVersion === undefined && saved.splitMode === undefined && saved.inputs.splitMode === undefined;
+      if (!isLegacy && (saved.snapshotVersion !== 2 || saved.splitMode !== mode)) invalid();
+      const keys = [...resultKeys, ...(mode === 'by_person' ? ['breakdown'] : [])];
+      if (!keys.every(key => JSON.stringify(saved.result?.[key]) === JSON.stringify(expected.result[key]))) invalid();
     } catch { invalid(); }
     resultIds.add(saved.id);
   }
@@ -75,7 +88,7 @@ export function createTripStore(getStorage, makeId = () => crypto.randomUUID(), 
       if (!isCurrent(calculation, inputs)) throw new Error('Result is invalid or out of date. Calculate again before saving.');
       const data = read();
       if (!data.trips.some(trip => trip.id === tripId)) throw new Error('Create or select a trip before saving.');
-      const saved = { id: makeId(), tripId, ...clone(calculation), savedAt: now() };
+      const saved = { id: makeId(), tripId, snapshotVersion: 2, splitMode: calculation.inputs.splitMode ?? 'equal', ...clone(calculation), savedAt: now() };
       data.results.push(saved); write(data);
       return clone(saved);
     },

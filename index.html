@@ -6,7 +6,7 @@
   <meta name="description" content="Restaurant tipping guidance and an exact bill split for your next trip.">
   <title>Travel Tipping · Utility Suite</title>
 </head>
-<body>
+<body data-analytics-surface="calculator">
   <main class="container">
     <header>
       <p class="eyebrow">Utility Suite / Travel</p>
@@ -25,7 +25,7 @@
           <aside class="guidance" aria-labelledby="guidance-title">
             <h3 id="guidance-title">Restaurant guidance</h3>
             <p id="guidance-text"></p>
-            <p class="help"><a id="guidance-source"></a><br>Reviewed <time id="reviewed"></time></p>
+            <p class="help"><a id="guidance-source" data-analytics-action="open_guidance"></a><br>Reviewed <time id="reviewed"></time></p>
           </aside>
           <label for="subtotal">Bill subtotal before tax</label>
           <input id="subtotal" name="subtotal" inputmode="decimal" placeholder="100.00" aria-describedby="subtotal-help subtotal-error">
@@ -41,39 +41,67 @@
           </div>
           <p class="help" id="tip-help">Editable, 0–100%. Applied only to the subtotal, excluding the charges above. Starts at zero; destination changes never choose a tip for you.</p>
           <p class="help">Use decimal points, no commas. Amounts: 0–1,000,000 with up to two decimal places. Diners: 1–1,000.</p>
-          <button type="submit">Calculate &amp; split</button>
+          <label for="splitMode">Split method</label>
+          <select id="splitMode" name="splitMode" aria-describedby="split-help splitMode-error">
+            <option value="equal" selected>Equal split</option>
+            <option value="by_person">By person</option>
+          </select>
+          <p class="help" id="split-help">By person allocates tax/service charges and the additional tip in proportion to what each diner ordered. Enter combined item subtotals; receipt scanning and item-by-item entry are not included.</p>
+          <p class="error" id="splitMode-error"></p>
+          <fieldset id="person-subtotals" data-analytics-private hidden>
+            <legend>Each diner’s subtotal</legend>
+            <p class="help" id="person-help">Use the bill currency and exclude separately added charges. These subtotals must add up exactly to the bill subtotal. Individual zeros are allowed; the combined subtotal must be positive.</p>
+            <div id="person-fields"></div>
+            <p class="error" id="personSubtotals-error" role="status"></p>
+          </fieldset>
+          <button type="submit" data-analytics-action="calculate">Calculate &amp; split</button>
           <p id="form-status" role="alert"></p>
         </form>
       </section>
       <section class="card results" aria-labelledby="results-title" aria-live="polite" aria-atomic="true">
         <p class="eyebrow">The breakdown</p><h2 id="results-title">Your result</h2>
-        <div id="result-content"><p class="muted">Enter your bill and select Calculate &amp; split to see the tip, total and each person's share.</p></div>
+        <div id="result-content" data-analytics-private><p class="muted">Enter your bill and select Calculate &amp; split to see the tip, total and each person's share.</p></div>
+        <section class="conversion-controls" aria-labelledby="conversion-title">
+          <h3 id="conversion-title">Convert total · reference-rate estimate</h3>
+          <label for="target-currency">Target currency</label>
+          <select id="target-currency" aria-describedby="conversion-help">
+            <option value="EUR">EUR · Euro</option>
+            <option value="GBP">GBP · British pound</option>
+            <option value="USD">USD · US dollar</option>
+            <option value="HKD">HKD · Hong Kong dollar</option>
+          </select>
+          <button id="convert-total" data-analytics-action="convert" type="button" disabled>Convert total</button>
+          <p class="help" id="conversion-help">Separate from the bill’s display currency.  Uses the latest published reference rate, not a live card or cash quote.  Actual card or cash exchange rates and fees may differ.</p>
+          <div id="conversion-status" data-analytics-private role="status" aria-live="polite"></div>
+          <p class="help">Source: <a href="https://frankfurter.dev/" data-analytics-action="open_rate_source">Frankfurter</a>.  The original bill and saved trips stay in their original currency.  Conversion estimates are not saved.</p>
+        </section>
         <div class="save-controls">
           <label for="save-trip">Save to trip</label>
-          <select id="save-trip" aria-describedby="save-help"></select>
-          <button id="save-result" type="button" disabled>Save current result</button>
+          <select id="save-trip" data-analytics-private aria-describedby="save-help"></select>
+          <button id="save-result" data-analytics-action="save_result" type="button" disabled>Save current result</button>
           <p class="help" id="save-help">Calculate first, then explicitly save. Changing any calculator input requires a new calculation.</p>
-          <p id="save-status" role="status"></p>
+          <p id="save-status" data-analytics-private role="status"></p>
         </div>
       </section>
     </div>
     <section class="card trip-history" aria-labelledby="history-title">
       <h2 id="history-title">Your trips &amp; saved results</h2>
       <p class="help">Saved only in this browser profile at this exact address (including the port). No cloud backup or sync. Clearing browser data removes trips; private browsing may erase them when closed. Storage is limited and may be blocked or full. Use the same URL when reopening the app.</p>
-      <p id="storage-status" role="status"></p>
+      <p id="storage-status" data-analytics-private role="status"></p>
       <form id="create-trip">
         <label for="trip-name">New trip name</label>
-        <div class="row"><input id="trip-name" name="tripName" maxlength="80" required placeholder="Paris weekend"><button type="submit">Create trip</button></div>
-        <p id="trip-status" role="status"></p>
+        <div class="row"><input id="trip-name" data-analytics-private name="tripName" maxlength="80" required placeholder="Paris weekend"><button type="submit" data-analytics-action="create_trip">Create trip</button></div>
+        <p id="trip-status" data-analytics-private role="status"></p>
       </form>
       <label for="history-trip">Browse a trip</label>
-      <select id="history-trip"></select>
-      <div id="history-list"></div>
-      <section id="saved-details" aria-labelledby="saved-title" hidden>
+      <select id="history-trip" data-analytics-private></select>
+      <div id="history-list" data-analytics-private></div>
+      <section id="saved-details" data-analytics-private aria-labelledby="saved-title" hidden>
         <h3 id="saved-title">Saved calculation details</h3>
         <div id="saved-content"></div>
       </section>
     </section>
+    <p class="help">We use PostHog for usage events and masked session replay to improve this prototype.  Form values, trip names, bill amounts and saved details are hidden from replay and excluded from action events.  We do not identify you by name or email.</p>
     <footer><p>Amounts are calculated in whole cents. Any leftover cents go to the first diners so shares add up exactly.</p><p>Results are saved only when you choose Save current result. Saved details are snapshots, independent of later calculator changes.</p></footer>
   </main>
   <script type="module" src="/src/main.js"></script>

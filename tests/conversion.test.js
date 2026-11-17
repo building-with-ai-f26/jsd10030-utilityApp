@@ -10,7 +10,7 @@ const options = data => ({
   now: () => new Date('2026-11-15T12:00:00Z'),
 });
 
-test('requests a real API endpoint without sending bill amounts or credentials', async () => {
+test('requests only the backend currency pair without bill amounts or credentials', async () => {
   let observed;
   const result = await fetchConversion(request, {
     ...options(sample),
@@ -19,7 +19,7 @@ test('requests a real API endpoint without sending bill amounts or credentials',
       return { ok: true, json: async () => sample };
     },
   });
-  assert.equal(observed.url, `${RATE_API}/usd/eur`);
+  assert.equal(observed.url, `${RATE_API}?base=USD&target=EUR`);
   assert.equal(observed.config.credentials, 'omit');
   assert.equal(result.totalCents, 12800);
   assert.equal(result.convertedCents, 11520);

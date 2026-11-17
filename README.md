@@ -20,7 +20,7 @@
 6. Push meaningful commits on **at least two separate days each week outside class**, including the November 3 break.
 7. Submit your **Product Page URL and repository URL in Icerynk**. Come ready to demo the prototype in two minutes on November 10.
 
-Historical Build 1 instructions are retained above.  The PostHog Free plan account was created November 7.  Build 2 conversion, analytics and By person splits are now deployed in commit `9f87215`; submission remains pending.
+Historical Build 1 instructions are retained above.  The PostHog Free plan account was created November 7.  Build 2 conversion, analytics and By person splits are now deployed in commit `9f87215`; Build 2 was submitted November 15, 2026.  Attempt 2 at 1:17 PM New York time included the PostHog image.
 
 ## Repository map
 
@@ -124,7 +124,7 @@ The result shows the original total, converted estimate, currency codes, exchang
 
 Provider: [Frankfurter v2](https://frankfurter.dev/).  Official documentation reviewed November 15, 2026 describes a free public API without an API key and [open CORS for browser requests](https://frankfurter.dev/javascript/).  The [currency catalog](https://frankfurter.dev/currencies/) includes all four offered targets.  This implementation uses no credentials, account, paid plan, SDK or new dependencies.  Official documentation states no daily/monthly quotas, with rate limiting to prevent abuse.  Free access does not guarantee availability or an uptime commitment.  No paid service was enabled.
 
-Requests use `https://api.frankfurter.dev/v2/rate/{base}/{quote}` and send the currency pair only, not the bill amount or trip names.  The provider receives normal connection metadata such as IP address.  The app has no embedded fallback rates.  Missing rates, malformed responses, timeouts (10 seconds), offline failures and service errors show a message instead of an estimate.  Editing calculator inputs or selecting another target clears the estimate and cancels/discards outdated requests.  Network failure does not block ordinary calculation or trip saving.
+The November 15 public build calls Frankfurter directly.  The November 16 local correction instead requests `/api/rates?base=USD&target=EUR` from our Node backend, which alone calls the fixed `https://api.frankfurter.dev/v2/rate/{base}/{quote}` endpoint.  Both send the currency pair only, not the bill amount or trip names.  The provider receives normal connection metadata such as IP address.  The app has no embedded fallback rates.  Missing rates, malformed responses, timeouts (10 seconds), offline failures and service errors show a message instead of an estimate.  Editing calculator inputs or selecting another target clears the estimate and cancels/discards outdated requests.  Network failure does not block ordinary calculation or trip saving.
 
 ### Local conversion check
 
@@ -236,4 +236,68 @@ My public browser checks produced shares of $38.40 and $89.60.  USD 128 converte
 
 Four November 15 Build 2 screenshots are included: the By person result (70/30 diner order), the Frankfurter conversion with rate/date, reopened “Live test” details, and PostHog event receipt from the public calculator.  The November 7–8 images remain historical Build 1 evidence.  The PostHog screenshot does not show replay playback or conversion_failed receipt; those statuses are recorded separately.
 
-PRD v2 and the Build 2 log are in `docs/index.html`.  Submission remains pending.  Recorded active project time: approximately 1.5 hours November 7, 50 minutes November 8, and 2 hours Sunday, November 15, 2026: 4 hours 20 minutes total.  Recorded project spending: $27 for Codex credits used for development on November 15.  This is development spending, not a per-user-run API cost.  My existing ChatGPT Pro subscription remains separate and unallocated to this project.  Token usage has not been measured.  Runtime API cost per user run remains unmeasured; Frankfurter uses its free public API.
+PRD v2 and the Build 2 log are in `docs/index.html`.  Build 2 was submitted November 15, 2026.  Attempt 2 at 1:17 PM New York time included the PostHog image.  Recorded active project time: approximately 1.5 hours November 7, 50 minutes November 8, and 2 hours Sunday, November 15, 2026: 4 hours 20 minutes total.  Recorded project spending: $27 for Codex credits used for development on November 15.  This is development spending, not a per-user-run API cost.  My existing ChatGPT Pro subscription remains separate and unallocated to this project.  Token usage has not been measured.  Runtime API cost per user run remains unmeasured; Frankfurter uses its free public API.
+
+
+## November 16 backend correction — local, not deployed or resubmitted
+
+Browser → Vite `/api/rates` proxy → Node backend → Frankfurter → validated rate/date → browser.  The browser keeps amounts, exact-cent conversion and trip names; no direct-provider fallback is used.  Existing cancellation, stale-result protection and PostHog events/masking are preserved.  The published November 15 app and its screenshots still document the earlier browser-direct architecture, not this backend correction.
+
+Start two Terminal windows in the repository:
+
+```bash
+# Terminal 1: backend on 127.0.0.1:3001
+npm run dev:api
+# Terminal 2: frontend on its original origin
+npm run dev
+```
+
+If Vite was already running, stop it with Control-C and restart to load `vite.config.js`.  Open `http://127.0.0.1:5173/`; existing trips remain on this origin.  Do not switch ports for your saved-trip checks.  Product Page: `http://127.0.0.1:5173/docs/index.html`.
+
+The backend accepts only GET `/api/rates` with exactly `base` (USD/GBP/EUR) and a different `target` (USD/GBP/EUR/HKD).  It rejects extra parameters and request bodies, uses a fixed HTTPS upstream with redirects disabled, validates currencies, positive finite rate and real non-future UTC date, and returns only base/quote/rate/date.  Its 8-second deadline covers headers and JSON body; the browser retains its 10-second deadline.  Errors use 400/403/404/405/429/502/504 with no invented rates or private upstream error text.  No request logging is added.  Browser disconnects abort upstream work.
+
+### Verification and remaining checks
+
+The initial backend suite passed 121 tests; the Render-ready suite passed 124 tests, including backend HTTP success, validation, upstream status errors, malformed data, network/JSON failures, timeouts and CORS.  Existing calculation, custom splits, snapshots, conversion arithmetic/cancellation and analytics tests passed.  Standard production and temporary publishing builds passed.  A real local backend request returned USD/EUR rate 0.90603 dated 2026-11-17 (UTC rate dates can be ahead of the New York calendar date).  This connectivity observation is separate from mocked tests; it is not a guaranteed future rate.  A real request through a temporary Vite proxy on port 5174 returned the same validated rate/date.  After Vite was restarted on 5173, my local browser checks passed: calculation, conversion and reopening saved details worked.  These observations do not complete cancellation/stale-input checks, every saved-history regression check or PostHog receipt for this correction.  `conversion_failed` receipt remains pending.
+
+### Smallest production deployment step
+
+Deploy `server/rates.js` to a Node >=22.12 HTTPS service using `npm ci` then `npm run start:api`; set `HOST=0.0.0.0`, the platform's `PORT`, and `ALLOWED_ORIGIN=https://building-with-ai-f26.github.io`.  Configure a hosting spending limit where available.  Validate the real rate endpoint and allowed-origin response before setting the frontend's public `VITE_API_ORIGIN` to that HTTPS origin (no path/trailing slash).  CORS restricts browser reads, not non-browser abuse: the endpoint is public and currently has no authentication, cache or application rate limiter.  Provider/host outages, abuse and hosting costs remain deployment risks; monitor usage and add a host rate limit before wider use.
+
+GitHub Pages cannot run Node.  Keep existing `docs/app/` until the backend is deployed and verified.  The publishing build rejects a missing or invalid HTTPS API origin:
+
+```bash
+npm test
+npm run build
+# Build-check only; this .invalid origin is not a deployable backend:
+VITE_API_ORIGIN=https://backend-not-deployed.invalid npm run build:pages -- --outDir /tmp/utility-backend-pages-check --emptyOutDir
+# Only after real backend verification:
+# VITE_API_ORIGIN=https://YOUR-VERIFIED-BACKEND npm run build:pages
+```
+
+The placeholder build demonstrates asset generation only; no frontend configured with it should be published.  Set VITE_API_ORIGIN explicitly in the publishing command/environment; the publishing config does not load `.env`.  Vite production preview of the ordinary build requires the backend proxy or an explicitly configured API origin.
+
+Recorded hours remain 4 hours 20 minutes, with no November 16 time supplied.  Recorded spending remains $27 in Codex development credits; ChatGPT Pro is separate and unallocated and token usage unmeasured.  Frankfurter's public API requires no key and has no per-request charge; backend hosting pricing is not selected or incurred here.  Runtime cost per user run remains unmeasured.  The November 15 submission is historical; this November 16 correction is prepared for a separate backend deployment and has not been resubmitted.
+
+
+### Render Free deployment settings
+
+Use a **Node Web Service**, repository root, branch `main`, **Free** instance:
+
+| Setting | Value |
+| --- | --- |
+| Build command | `npm ci` |
+| Start command | `npm run start:api` |
+| Health check path | `/health` |
+| `NODE_ENV` | `production` |
+| `HOST` | `0.0.0.0` |
+| `ALLOWED_ORIGIN` | `https://building-with-ai-f26.github.io` |
+| `PORT` | Render supplies this; do not override it with local port 3001 |
+
+Use Node >=22.12 as required by package.json.  No API key, database or private environment file is required.  `VITE_API_ORIGIN` is a later frontend build setting, not needed to run this backend.  The production/Render default host is also 0.0.0.0 if HOST is omitted; local development defaults to 127.0.0.1.  The existing `npm run start:api` command runs only Node, without Vite.  GET `/health` returns `{"status":"ok"}` without contacting Frankfurter: it proves the process responds, not that upstream rates are available.
+
+CORS allows the configured Pages origin and rejects other browser origins on the rate endpoint.  Local same-origin Vite proxy requests work without an Origin header.  Do not configure the Pages project path as the origin.  CORS is not authentication or protection against non-browser requests.
+
+Render Free sleeps after 15 minutes without inbound traffic; waking can take about a minute, longer than the browser's 10-second timeout.  There is no automatic retry or fabricated estimate.  **Hosted cold-start verification remains pending:** leave the service idle for at least 15 minutes without health polling or other test traffic, request a conversion, and record the actual behavior (timeout/loading/error or success).  If it fails, confirm no success event or estimate appears, allow about a minute for waking, then explicitly click Convert total again.  Confirm a real rate/date appears and calculation/saved details remain usable throughout.  Check failed/successful event receipt separately; do not mark conversion_failed received until observed.  After editing inputs during a wait, recalculate before retrying.  Test warm requests and the allowed-origin response before rebuilding the Pages app with the verified backend origin.
+
+Official references: [web-service binding and setup](https://render.com/docs/web-services), [health checks](https://render.com/docs/health-checks), [Free service cold starts and limits](https://render.com/docs/free).  Free instance hours, bandwidth and build allowances have limits; review the dashboard and avoid enabling paid resources without review.  No Render expense has been reported.  Recorded development spending remains $27; runtime cost per user run is unmeasured.

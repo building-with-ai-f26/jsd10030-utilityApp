@@ -1,5 +1,5 @@
 export const conversionCurrencies = ['USD', 'GBP', 'EUR', 'HKD'];
-export const RATE_API = 'https://api.frankfurter.dev/v2/rate';
+export const RATE_API = `${import.meta.env?.VITE_API_ORIGIN || ''}/api/rates`;
 
 function validateRequest({ totalCents, base, target }) {
   if (!Number.isSafeInteger(totalCents) || totalCents < 0) throw new Error('Calculate a valid bill before converting.');
@@ -43,7 +43,7 @@ export async function fetchConversion(request, {
     const task = (async () => {
       let response;
       try {
-        response = await fetchImpl(`${RATE_API}/${request.base.toLowerCase()}/${request.target.toLowerCase()}`, {
+        response = await fetchImpl(`${RATE_API}?base=${request.base}&target=${request.target}`, {
           signal: controller.signal, credentials: 'omit',
         });
       } catch (error) {

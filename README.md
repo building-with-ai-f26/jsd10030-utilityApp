@@ -124,7 +124,7 @@ The result shows the original total, converted estimate, currency codes, exchang
 
 Provider: [Frankfurter v2](https://frankfurter.dev/).  Official documentation reviewed November 15, 2026 describes a free public API without an API key and [open CORS for browser requests](https://frankfurter.dev/javascript/).  The [currency catalog](https://frankfurter.dev/currencies/) includes all four offered targets.  This implementation uses no credentials, account, paid plan, SDK or new dependencies.  Official documentation states no daily/monthly quotas, with rate limiting to prevent abuse.  Free access does not guarantee availability or an uptime commitment.  No paid service was enabled.
 
-The November 15 public build calls Frankfurter directly.  The November 16 local correction instead requests `/api/rates?base=USD&target=EUR` from our Node backend, which alone calls the fixed `https://api.frankfurter.dev/v2/rate/{base}/{quote}` endpoint.  Both send the currency pair only, not the bill amount or trip names.  The provider receives normal connection metadata such as IP address.  The app has no embedded fallback rates.  Missing rates, malformed responses, timeouts (10 seconds), offline failures and service errors show a message instead of an estimate.  Editing calculator inputs or selecting another target clears the estimate and cancels/discards outdated requests.  Network failure does not block ordinary calculation or trip saving.
+The historical November 15 public build called Frankfurter directly.  The November 16 replacement publishing build instead requests `/api/rates?base=USD&target=EUR` from our Node backend, which alone calls the fixed `https://api.frankfurter.dev/v2/rate/{base}/{quote}` endpoint.  Both send the currency pair only, not the bill amount or trip names.  The provider receives normal connection metadata such as IP address.  The app has no embedded fallback rates.  Missing rates, malformed responses, timeouts (10 seconds), offline failures and service errors show a message instead of an estimate.  Editing calculator inputs or selecting another target clears the estimate and cancels/discards outdated requests.  Network failure does not block ordinary calculation or trip saving.
 
 ### Local conversion check
 
@@ -239,9 +239,9 @@ Four November 15 Build 2 screenshots are included: the By person result (70/30 d
 PRD v2 and the Build 2 log are in `docs/index.html`.  Build 2 was submitted November 15, 2026.  Attempt 2 at 1:17 PM New York time included the PostHog image.  Recorded active project time: approximately 1.5 hours November 7, 50 minutes November 8, and 2 hours Sunday, November 15, 2026: 4 hours 20 minutes total.  Recorded project spending: $27 for Codex credits used for development on November 15.  This is development spending, not a per-user-run API cost.  My existing ChatGPT Pro subscription remains separate and unallocated to this project.  Token usage has not been measured.  Runtime API cost per user run remains unmeasured; Frankfurter uses its free public API.
 
 
-## November 16 backend correction — local, not deployed or resubmitted
+## November 16 backend correction — Render verified, Pages build connected
 
-Browser → Vite `/api/rates` proxy → Node backend → Frankfurter → validated rate/date → browser.  The browser keeps amounts, exact-cent conversion and trip names; no direct-provider fallback is used.  Existing cancellation, stale-result protection and PostHog events/masking are preserved.  The published November 15 app and its screenshots still document the earlier browser-direct architecture, not this backend correction.
+Browser → Vite `/api/rates` proxy → Node backend → Frankfurter → validated rate/date → browser.  The browser keeps amounts, exact-cent conversion and trip names; no direct-provider fallback is used.  Existing cancellation, stale-result protection and PostHog events/masking are preserved.  The November 15 screenshots document the earlier browser-direct architecture, not the backend correction.  The replacement Pages build uses the verified Render backend described below.
 
 Start two Terminal windows in the repository:
 
@@ -264,15 +264,15 @@ The initial backend suite passed 121 tests; the Render-ready suite passed 124 te
 
 Deploy `server/rates.js` to a Node >=22.12 HTTPS service using `npm ci` then `npm run start:api`; set `HOST=0.0.0.0`, the platform's `PORT`, and `ALLOWED_ORIGIN=https://building-with-ai-f26.github.io`.  Configure a hosting spending limit where available.  Validate the real rate endpoint and allowed-origin response before setting the frontend's public `VITE_API_ORIGIN` to that HTTPS origin (no path/trailing slash).  CORS restricts browser reads, not non-browser abuse: the endpoint is public and currently has no authentication, cache or application rate limiter.  Provider/host outages, abuse and hosting costs remain deployment risks; monitor usage and add a host rate limit before wider use.
 
-GitHub Pages cannot run Node.  Keep existing `docs/app/` until the backend is deployed and verified.  The publishing build rejects a missing or invalid HTTPS API origin:
+GitHub Pages cannot run Node.  The Render backend has now passed the HTTP checks below, allowing regeneration of `docs/app/` with its verified origin.  The publishing build rejects a missing or invalid HTTPS API origin:
 
 ```bash
 npm test
 npm run build
 # Build-check only; this .invalid origin is not a deployable backend:
 VITE_API_ORIGIN=https://backend-not-deployed.invalid npm run build:pages -- --outDir /tmp/utility-backend-pages-check --emptyOutDir
-# Only after real backend verification:
-# VITE_API_ORIGIN=https://YOUR-VERIFIED-BACKEND npm run build:pages
+# Verified production backend:
+VITE_API_ORIGIN=https://jsd10030-utilityapp.onrender.com npm run build:pages
 ```
 
 The placeholder build demonstrates asset generation only; no frontend configured with it should be published.  Set VITE_API_ORIGIN explicitly in the publishing command/environment; the publishing config does not load `.env`.  Vite production preview of the ordinary build requires the backend proxy or an explicitly configured API origin.
@@ -301,3 +301,12 @@ CORS allows the configured Pages origin and rejects other browser origins on the
 Render Free sleeps after 15 minutes without inbound traffic; waking can take about a minute, longer than the browser's 10-second timeout.  There is no automatic retry or fabricated estimate.  **Hosted cold-start verification remains pending:** leave the service idle for at least 15 minutes without health polling or other test traffic, request a conversion, and record the actual behavior (timeout/loading/error or success).  If it fails, confirm no success event or estimate appears, allow about a minute for waking, then explicitly click Convert total again.  Confirm a real rate/date appears and calculation/saved details remain usable throughout.  Check failed/successful event receipt separately; do not mark conversion_failed received until observed.  After editing inputs during a wait, recalculate before retrying.  Test warm requests and the allowed-origin response before rebuilding the Pages app with the verified backend origin.
 
 Official references: [web-service binding and setup](https://render.com/docs/web-services), [health checks](https://render.com/docs/health-checks), [Free service cold starts and limits](https://render.com/docs/free).  Free instance hours, bandwidth and build allowances have limits; review the dashboard and avoid enabling paid resources without review.  No Render expense has been reported.  Recorded development spending remains $27; runtime cost per user run is unmeasured.
+
+
+### November 16 Render verification and Pages connection
+
+Verified backend: https://jsd10030-utilityapp.onrender.com.  GET `/health` returned HTTP 200 with `{"status":"ok"}`.  GET `/api/rates?base=USD&target=EUR`, with Origin `https://building-with-ai-f26.github.io`, returned HTTP 200, JSON `{"base":"USD","quote":"EUR","rate":0.90603,"date":"2026-11-17"}` and the matching Access-Control-Allow-Origin header.  The date is the API's UTC rate date.  An unrelated Origin `https://example.com` received HTTP 403 without an allow-origin header.  These are real hosted HTTP checks, not browser or cold-start evidence.
+
+The publishing build was run with `VITE_API_ORIGIN=https://jsd10030-utilityapp.onrender.com npm run build:pages`.  Generated HTML uses the project `/app/` asset base; the JavaScript contains that backend origin and `/api/rates`, with no direct Frankfurter endpoint.  All 124 tests, both builds, generated-path and whitespace checks passed.  GitHub Pages serves the committed `docs/app/` output after deployment; its served HTML/assets must match before declaring this deployment verified.
+
+Public browser calculation/conversion/save-reopen checks using this hosted backend remain pending, as do controlled cold-start/retry testing and conversion_failed PostHog receipt.  Earlier local browser checks and November 15 public observations remain historical evidence.  No Icerynk resubmission was made.  Recorded time remains 4 hours 20 minutes; recorded development spending remains $27 in Codex credits, with ChatGPT Pro separate/unallocated, token usage unmeasured, and runtime cost per user run unmeasured.

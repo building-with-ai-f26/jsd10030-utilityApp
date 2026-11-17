@@ -114,3 +114,7 @@ Recorded active project time: approximately 1.5 hours November 7, 50 minutes Nov
 ### November 16 backend correction
 
 Implemented locally: Node currency-pair endpoint → fixed Frankfurter API, with Vite development proxy preserving port 5173.  Full suite: 124 tests passed; production and temporary publishing builds passed.  Real backend and temporary Vite proxy requests succeeded.  After restarting Vite on 5173, calculation, conversion and reopening saved details passed local browser checks.  Render Free setup includes /health and production PORT/0.0.0.0 binding.  Production backend deployment, hosted cold-start retry verification, other unperformed browser checks, PostHog receipt for this correction and any resubmission remain pending.  Existing docs/app output is unchanged.  Recorded hours remain 4 hours 20 minutes and development spending $27; no November 16 hours or additional expense were supplied.  See README for production API configuration and hosting risks.
+
+### November 16 hosted backend and Pages connection
+
+Render backend https://jsd10030-utilityapp.onrender.com verified by real HTTP requests: /health 200; USD/EUR rate 0.90603 dated 2026-11-17; allowed Pages origin with matching CORS header; unrelated origin rejected with 403.  Pages output rebuilt with this origin; 124 tests and both builds passed.  Verify served Pages HTML and assets after pushing.  Public browser checks with this backend, cold-start/retry testing and conversion_failed receipt remain pending.  No resubmission, extra hours or additional spending recorded.

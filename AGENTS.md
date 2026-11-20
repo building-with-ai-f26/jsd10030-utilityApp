@@ -28,3 +28,19 @@
 4. **Verify changes:** Run relevant checks. For a reproducible logic bug, use a failing test to demonstrate the fix when practical. Record manual checks and known limitations; follow the selected Build 4 evaluation track.
 5. **Zero secrets in code:** Never hardcode API keys, tokens, or credentials. Always read from environment variables (`.env`) and update `.env.example` when new variables are needed.
 6. **Stop when looping:** If a fix fails twice in a row, stop, summarize what failed, and ask the human before trying a third approach.
+
+## 4. Shipping
+
+1. Check git status and preserve local work.  Run `npm test`, `npm run build` and `git diff --check`; keep private `.env` files, dependencies and unrelated screenshots out of the release.
+2. If backend code changed, deploy it first when authorized.  Verify `https://jsd10030-utilityapp.onrender.com/health` returns 200 and status ok; verify `/api/rates?base=USD&target=EUR` returns valid base/quote/rate/date JSON.  Repeat the rates request with `Origin: https://building-with-ai-f26.github.io` and check the matching Access-Control-Allow-Origin header.  Health alone does not prove rates work.
+3. Only with a verified backend, run `VITE_API_ORIGIN=https://jsd10030-utilityapp.onrender.com npm run build:pages`.  Review generated `docs/app/` paths and backend URL; preserve the Product Page and screenshot assets.  Never publish a placeholder API origin.
+4. Review the staged files and run `git diff --cached --check`.  Commit/push only when authorized.  Verify Pages serves the intended HTML, JavaScript and CSS after deployment.
+5. At `https://building-with-ai-f26.github.io/jsd10030-utilityApp/app/`, check calculation, conversion (rate/date), explicit saving and reopening.  Trace the backend request as below.  Record observed checks and failures in `docs/index.html`; keep cold-start, replay and event receipt pending until observed.
+
+## 5. Ask me first
+
+Get approval before using a paid service or enabling billable resources, changing where trip data is stored or what analytics collects, or performing a destructive action (including deleting trips/site data, overwriting work or force-pushing).  Existing plan/approval rules still apply; release steps do not authorize deployment, commit, push or submission by themselves.
+
+## 6. Rule from a real mistake
+
+Build 2's public calculator converted currency successfully while the browser still called Frankfurter directly.  A working result did not satisfy the backend requirement.  Before marking that requirement complete, trace one real conversion from the published calculator to our Render `/api/rates` endpoint and from the backend to the fixed Frankfurter provider.  Check the published browser request and pair-only parameters, correlate its response with backend/provider evidence, and record the date, app commit/asset, endpoints, status and rate/date in the build log without secrets, amounts or trip names.  Source inspection or separate curl checks alone do not prove the full published request path; keep any unobserved hop pending.

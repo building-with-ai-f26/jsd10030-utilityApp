@@ -57,11 +57,11 @@
       <p class="eyebrow">NYU Stern · Building with AI · Fall 2026</p>
       <h1>Utility Suite</h1>
       <p class="lede">Everyday tools, together in one ad-free app.  Starting with restaurant tipping and bill splitting for travelers.</p>
-      <p class="meta">Product Page · PRD v2 · Updated November 15, 2026</p>
+      <p class="meta">Product Page · PRD v2 + PRD v3 · Updated November 20, 2026</p>
       <a class="open-app" href="app/" data-analytics-action="open_calculator">Open calculator</a>
       <p class="meta">Trips stay in your browser, with no cloud backup or sync.  Existing localhost trips do not transfer to the public app.</p>
       <nav aria-label="Page sections">
-        <a href="#prd" data-analytics-action="read_prd">Read the PRD</a><a href="#status" data-analytics-action="view_status">Current status</a><a href="#prototype" data-analytics-action="view_evidence">Prototype evidence</a><a href="#build-log" data-analytics-action="view_log">Build log</a><a href="#roadmap" data-analytics-action="view_roadmap">Roadmap</a>
+        <a href="#prd" data-analytics-action="read_prd">PRD v2</a><a href="#prd-v3">PRD v3</a><a href="#status" data-analytics-action="view_status">Current status</a><a href="#prototype" data-analytics-action="view_evidence">Prototype evidence</a><a href="#build-log" data-analytics-action="view_log">Build log</a><a href="#roadmap" data-analytics-action="view_roadmap">Roadmap</a>
       </nav>
       <p class="deadline"><strong>Build 1 due:</strong> Monday, November 9, 2026 at noon, New York time.</p>
     </header>
@@ -94,6 +94,23 @@
         <h3>Riskiest assumption &amp; architecture · preliminary</h3>
         <p>Travelers need guidance they can interpret correctly, especially when service is already included.  Guidance sources have been reviewed, and automated checks cover additional tips, rounding and exact share totals.  Earlier builder checks and Anirudh’s feedback are recorded below.  The 30/70 result, mismatch validation and saved By person reopening passed my local checks; other manual checks remain pending.</p>
         <p><strong>Implemented flow (public and local):</strong> Destination guidance + bill inputs → tip and equal or proportional split calculation → result → explicit save to a named trip → retrieval.  The calculator uses HTML/CSS and JavaScript with Vite and Node’s built-in test runner.  Saved snapshots use localStorage in the same browser profile and origin.  Clearing browser data removes history; private browsing may erase it when closed.  There is no cloud backup or synchronization.  This Product Page is separate standalone HTML/CSS.</p>
+      </section>
+      <section id="prd-v3" aria-labelledby="prd-v3-title">
+        <p class="eyebrow">Build 3 · Beginner lane · November 20, 2026</p>
+        <h2 id="prd-v3-title">PRD version 3</h2>
+        <p>I kept the travel dining workflow: check guidance → calculate and split → explicitly save to a trip → reopen the result.  This version explains my hosting, storage and privacy decisions; PRD v2 above is preserved.</p>
+        <h3>Hosting: keep the bill useful when rates fail</h3>
+        <p>I use GitHub Pages for the calculator and a small Node backend on Render for conversion.  The browser sends only the currency pair; Render requests a reference rate from Frankfurter and returns the rate and date.  Amounts and the conversion calculation stay in the browser.  This keeps the backend focused on rate lookup, separate from bill splitting and saving.</p>
+        <p>In my November 20 phone test, the first conversion failed, but I could still save the bill.  A later attempt converted, saved and reopened successfully.  The app shows a failure instead of inventing a rate.  Render startup logs are consistent with a cold start; the failure’s exact cause and wait time remain unconfirmed.  Card or cash exchange rates may differ from the estimate.</p>
+        <h3>Storage: explicit, browser-only snapshots</h3>
+        <p>I chose browser localStorage to keep this version simple, without accounts or a server database.  Saving records the trip name and IDs, destination, original currency and bill inputs, split mode, per-person subtotals when used, tip, charges, total, individual shares and breakdown, plus a timestamp.  Saving is explicit; later edits do not change that snapshot.  The exchange-rate estimate is not saved.</p>
+        <p>History stays in the same browser profile and origin.  Switching devices or browsers does not transfer it; localhost history is separate from the public app.  Clearing site storage removes it, and private browsing may erase it.  There is no cloud backup or synchronization.</p>
+        <h3>Security and privacy: send less, state the limits</h3>
+        <p>Render receives the currency pair and normal connection metadata; Frankfurter receives the pair from Render, not the bill or trip name.  PostHog receives usage events, environment/surface labels, fixed click actions, sanitized page URLs and standard browser/session metadata, plus masked replay data.  App event properties exclude names and amounts; the app does not identify users by name or email.</p>
+        <p>The November 20 redacted scan covered repository text, generated app files and live JavaScript: 0 suspected private credentials in that scope.  The public PostHog project token is not a private personal API key.  The lockfile dependency audit reported 0 advisories.  Neither check proves complete security; history, image contents and the remote analytics SDK were outside the scan scope.</p>
+        <p>My local and public replay screenshots showed masked text.  On the public replay, I could follow the touch indicator while trip names and amounts stayed hidden.  Remaining risks include plaintext browser storage shared by scripts on the same origin, third-party analytics access, a public backend without an app rate limiter, and outages or cold-start delays.  Vendor settings and exhaustive privacy checks remain unverified.</p>
+        <p><strong>Evidence:</strong> <a href="https://github.com/building-with-ai-f26/jsd10030-utilityApp/blob/main/SECURITY.md">November 20 security audit</a> and <a href="https://github.com/building-with-ai-f26/jsd10030-utilityApp/blob/main/journal/build-03-build.md">November 20 build log</a>.</p>
+        <p class="meta">Classmate phone feedback, actual November 20 hours and additional Codex spending are pending.  My own phone checks are not classmate feedback.  Earlier recorded hours, costs and submission history remain unchanged.</p>
       </section>
       <section id="status" aria-labelledby="status-title">
         <p class="eyebrow">02 · Current implementation status</p>

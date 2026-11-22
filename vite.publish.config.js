@@ -1,5 +1,7 @@
 import { defineConfig } from 'vite';
 import { fileURLToPath } from 'node:url';
+import { validateAccountConfig } from './account-config.js';
+validateAccountConfig(process.env);
 
 const apiOrigin = process.env.VITE_API_ORIGIN;
 if (!apiOrigin || new URL(apiOrigin).protocol !== 'https:' || new URL(apiOrigin).origin !== apiOrigin) {
@@ -7,7 +9,11 @@ if (!apiOrigin || new URL(apiOrigin).protocol !== 'https:' || new URL(apiOrigin)
 }
 
 export default defineConfig({
-  define: { 'import.meta.env.VITE_API_ORIGIN': JSON.stringify(apiOrigin) },
+  define: {
+    'import.meta.env.VITE_API_ORIGIN': JSON.stringify(apiOrigin),
+    'import.meta.env.VITE_SUPABASE_URL': JSON.stringify(process.env.VITE_SUPABASE_URL || ''),
+    'import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY': JSON.stringify(process.env.VITE_SUPABASE_PUBLISHABLE_KEY || ''),
+  },
   root: fileURLToPath(new URL('.', import.meta.url)),
   base: '/jsd10030-utilityApp/app/',
   publicDir: false,

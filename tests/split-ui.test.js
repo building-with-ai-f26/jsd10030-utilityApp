@@ -7,7 +7,7 @@ import { createTripStore, prepareCalculation, isCurrent } from '../src/trips.js'
 import { destinations } from '../src/destinations.js';
 
 // Minimal DOM harness executes the actual app handlers without a browser package.
-function app() {
+function app({ accountFactory } = {}) {
   const nodes = new Map(); const events = []; let resetCount = 0;
   class Element {
     constructor(tag) { this.tag = tag; this.children = []; this.handlers = {}; this.attrs = {}; this._value = ''; this._text = ''; this.hidden = false; }
@@ -44,7 +44,7 @@ function app() {
   const store = createTripStore(() => ({ getItem: key => storage.get(key) ?? null, setItem: (key, value) => storage.set(key, value) }), () => `id-${++id}`);
   const main = readFileSync(new URL('../src/main.js', import.meta.url), 'utf8').replace(/^import .*;\n/gm, '');
   runInNewContext(main, {
-    document, window: { addEventListener() {} }, calculate, prepareCalculation, isCurrent, destinations,
+    document, window: { addEventListener() {} }, mountAccountUI: options => accountFactory ? accountFactory(options) : ({ isPrivate: () => false, label: () => 'This browser' }), calculate, prepareCalculation, isCurrent, destinations,
     startAnalytics: () => ({ track: event => events.push(event) }), createTripStore: () => store,
     createConversionLoader: () => ({ reset() { resetCount += 1; }, async load(request) { return { ...request, rate: 1, rateDate:'2026-11-15', convertedCents: request.totalCents }; } }),
   });
@@ -105,4 +105,48 @@ test('By person UI saves and opens the full breakdown and masks dynamic inputs',
   nodes.get('diners').value = '3'; nodes.get('diners').fire('input');
   assert.equal(nodes.get('person-fields').querySelectorAll('input').length, 3);
   assert.equal(nodes.get('person-2').value, '');
+});
+
+
+test('private save/reopen uses existing result renderer; sign-out clears private DOM and preserves guest snapshots', async () => {
+  let isPrivate = false; let changed; const cloudData = { version: 1, trips: [{ id: 'private-trip', name: 'Private dinner' }], results: [] };
+  const cloud = {
+    async load() { return structuredClone(cloudData); },
+    async save(tripId, calculation) {
+      const saved = { id: 'private-bill', tripId, snapshotVersion: 2, splitMode: 'by_person', ...structuredClone(calculation), savedAt: '2026-11-22T12:00:00Z' };
+      cloudData.results.push(saved); return structuredClone(saved);
+    },
+  };
+  const { nodes, store, events } = app({ accountFactory: ({onChange}) => { changed = onChange; return {isPrivate: () => isPrivate, cloud, label: () => isPrivate ? 'Private account' : 'This browser'}; } });
+  const tick = () => new Promise(resolve => setImmediate(resolve));
+  nodes.get('trip-name').value = 'Guest dinner'; nodes.get('create-trip').fire('submit');
+  nodes.get('calculator').fire('submit'); nodes.get('save-result').fire('click');
+  const guestBefore = store.load();
+  isPrivate = true; changed(); await tick();
+  assert.equal(nodes.get('save-destination').textContent, 'Save destination: Private account');
+  nodes.get('splitMode').value = 'by_person'; nodes.get('splitMode').fire('change');
+  nodes.get('person-0').value='30'; nodes.get('person-1').value='70';
+  nodes.get('calculator').fire('submit'); nodes.get('save-trip').value='private-trip'; nodes.get('save-trip').fire('change');
+  nodes.get('save-result').fire('click'); await tick();
+  assert.equal(cloudData.results.length,1);
+  nodes.get('history-trip').value='private-trip'; nodes.get('history-trip').fire('change'); await tick();
+  const oldButton = nodes.get('history-list').children[0]; oldButton.fire('click');
+  assert.match(nodes.get('saved-content').textContent,/38\.40/);assert.match(nodes.get('saved-content').textContent,/89\.60/);
+  assert.match(nodes.get('saved-content').textContent,/By person/);
+  isPrivate = false; changed();
+  assert.equal(nodes.get('saved-content').textContent,'');assert.equal(nodes.get('saved-details').hidden,true);
+  const previousEvents=events.length;oldButton.fire('click');assert.equal(events.length,previousEvents);
+  assert.deepEqual(store.load(),guestBefore);
+  assert.equal(nodes.get('save-destination').textContent,'Save destination: This browser');
+});
+
+test('late private history load cannot repopulate the screen after sign-out',async()=>{
+  let isPrivate=false;let changed;let resolve;
+  const {nodes}=app({accountFactory:({onChange})=>{changed=onChange;return{isPrivate:()=>isPrivate,label:()=>isPrivate?'Private account':'This browser',cloud:{load:()=>new Promise(done=>{resolve=done;})}};}});
+  isPrivate=true;changed();isPrivate=false;changed();
+  resolve({version:1,trips:[{id:'t',name:'Private dinner'}],results:[]});
+  await new Promise(done=>setImmediate(done));
+  assert.doesNotMatch(nodes.get('history-list').textContent,/Private dinner/);
+  assert.doesNotMatch(nodes.get('save-trip').textContent,/Private dinner/);
+  assert.equal(nodes.get('saved-content').textContent,'');
 });

@@ -5,6 +5,7 @@ import { calculate } from './tipping.js';
 import { destinations } from './destinations.js';
 import { createConversionLoader } from './conversion.js';
 import { createTripStore, prepareCalculation, isCurrent, STORAGE_KEY } from './trips.js';
+import { mountAccountUI } from './account-ui.js';
 
 const form = document.querySelector('#calculator');
 const destination = form.elements.destination;
@@ -28,13 +29,17 @@ let conversionLoading = false;
 let conversionRevision = 0;
 let currentCalculation = null;
 let storageAvailable = false;
+let privateTrips;
+let tripScope = 0;
+let historyRevision = 0;
+let privateSaving = false;
 function inputs() {
   const values = Object.fromEntries(['destination', 'currency', ...fields, 'splitMode'].map(key => [key, form.elements[key].value]));
   if (values.splitMode === 'by_person') values.personSubtotals = [...personFields.querySelectorAll('input')].map(field => field.value);
   return values;
 }
 function updateSaveButton() {
-  saveButton.disabled = !storageAvailable || !saveTrip.value || !isCurrent(currentCalculation, inputs());
+  saveButton.disabled = privateSaving || !storageAvailable || !saveTrip.value || !isCurrent(currentCalculation, inputs());
 }
 
 function updateConversionButton() {
@@ -190,6 +195,7 @@ function renderResult(target, result, currencyCode) {
 }
 
 function renderHistory(data) {
+  const viewScope = typeof tripScope === 'number' ? tripScope : 0;
   const list = document.querySelector('#history-list');
   list.replaceChildren();
   document.querySelector('#saved-details').hidden = true;
@@ -206,6 +212,7 @@ function renderHistory(data) {
     button.setAttribute('data-analytics-action', 'open_saved_details');
     button.textContent = `${destinations[saved.inputs.destination].name} · ${saved.inputs.currency} ${(saved.result.totalCents / 100).toFixed(2)} · ${new Date(saved.savedAt).toLocaleString()} — Open details`;
     button.addEventListener('click', () => {
+      if (typeof tripScope === 'number' && viewScope !== tripScope) return;
       const target = document.querySelector('#saved-content');
       const section = document.querySelector('#saved-details'); section.hidden = false;
       renderResult(target, saved.result, saved.inputs.currency);
@@ -217,32 +224,88 @@ function renderHistory(data) {
     list.append(button);
   }
 }
-function refreshTrips(selectedId) {
-  try {
-    const data = store.load();
-    for (const select of [saveTrip, historyTrip]) {
-      const previous = selectedId ?? select.value;
-      select.replaceChildren();
-      const placeholder = document.createElement('option');
-      placeholder.value = ''; placeholder.textContent = 'Select a trip'; select.append(placeholder);
-      for (const trip of data.trips) {
-        const option = document.createElement('option'); option.value = trip.id; option.textContent = trip.name; select.append(option);
-      }
-      if (data.trips.some(trip => trip.id === previous)) select.value = previous;
+function showTrips(data, selectedId) {
+  for (const select of [saveTrip, historyTrip]) {
+    const previous = selectedId ?? select.value;
+    select.replaceChildren();
+    const placeholder = document.createElement('option');
+    placeholder.value = ''; placeholder.textContent = 'Select a trip'; select.append(placeholder);
+    for (const trip of data.trips) {
+      const option = document.createElement('option'); option.value = trip.id; option.textContent = trip.name; select.append(option);
     }
-    storageAvailable = true;
-    document.querySelector('#storage-status').textContent = '';
-    renderHistory(data);
-  } catch (error) {
-    storageAvailable = false;
-    document.querySelector('#storage-status').textContent = error.message;
-    document.querySelector('#history-list').textContent = 'Saved history cannot be loaded.';
-    document.querySelector('#saved-details').hidden = true;
+    if (data.trips.some(trip => trip.id === previous)) select.value = previous;
   }
+  storageAvailable = true;
+  document.querySelector('#storage-status').textContent = '';
+  renderHistory(data);
   updateSaveButton();
+}
+function historyError(error) {
+  storageAvailable = false;
+  document.querySelector('#storage-status').textContent = error.message;
+  document.querySelector('#history-list').replaceChildren();
+  document.querySelector('#history-list').textContent = 'Saved history cannot be loaded.';
+  document.querySelector('#saved-content').replaceChildren();
+  document.querySelector('#saved-details').hidden = true;
+  updateSaveButton();
+}
+function refreshTrips(selectedId) {
+  if (privateTrips?.isPrivate()) return refreshPrivateTrips(selectedId);
+  historyRevision++;
+  try { showTrips(store.load(), selectedId); }
+  catch (error) { historyError(error); }
+}
+async function refreshPrivateTrips(selectedId) {
+  const revision = ++historyRevision; const scope = tripScope;
+  storageAvailable = false; updateSaveButton();
+  document.querySelector('#storage-status').textContent = 'Loading private trips…';
+  try {
+    const data = await privateTrips.cloud.load();
+    if (revision === historyRevision && scope === tripScope && privateTrips.isPrivate()) showTrips(data, selectedId);
+  } catch (error) {
+    if (revision === historyRevision && scope === tripScope) historyError(error);
+  }
+}
+function changeTripStorage() {
+  tripScope++; historyRevision++; privateSaving = false; storageAvailable = false;
+  saveTrip.replaceChildren(); historyTrip.replaceChildren();
+  document.querySelector('#history-list').replaceChildren();
+  document.querySelector('#saved-content').replaceChildren();
+  document.querySelector('#saved-details').hidden = true;
+  document.querySelector('#trip-name').value = '';
+  document.querySelector('#trip-status').textContent = '';
+  document.querySelector('#save-destination').textContent = `Save destination: ${privateTrips?.label() ?? 'This browser'}`;
+  clearResult();
+  refreshTrips();
+}
+async function createPrivateTrip() {
+  const scope = tripScope; const status = document.querySelector('#trip-status');
+  status.textContent = 'Creating private trip…';
+  try {
+    const trip = await privateTrips.cloud.createTrip(document.querySelector('#trip-name').value);
+    if (scope !== tripScope || !privateTrips.isPrivate()) return;
+    document.querySelector('#trip-name').value = '';
+    status.textContent = 'Private account trip created.';
+    await refreshPrivateTrips(trip.id);
+  } catch (error) { if (scope === tripScope) status.textContent = error.message; }
+}
+async function savePrivateResult() {
+  if (privateSaving || !storageAvailable) return;
+  const scope = tripScope;
+  privateSaving = true; updateSaveButton();
+  saveStatus.textContent = 'Saving to private account…';
+  try {
+    const saved = await privateTrips.cloud.save(saveTrip.value, currentCalculation, inputs());
+    if (scope !== tripScope || !privateTrips.isPrivate()) return;
+    saveStatus.textContent = 'Result saved to private account.';
+    analytics.track('result_saved');
+    await refreshPrivateTrips(saved.tripId);
+  } catch (error) { if (scope === tripScope) saveStatus.textContent = error.message; }
+  finally { if (scope === tripScope) { privateSaving = false; updateSaveButton(); } }
 }
 document.querySelector('#create-trip').addEventListener('submit', event => {
   event.preventDefault();
+  if (privateTrips?.isPrivate()) { createPrivateTrip(); return; }
   const status = document.querySelector('#trip-status');
   status.textContent = '';
   try {
@@ -255,6 +318,7 @@ document.querySelector('#create-trip').addEventListener('submit', event => {
 saveTrip.addEventListener('change', updateSaveButton);
 historyTrip.addEventListener('change', () => refreshTrips());
 saveButton.addEventListener('click', () => {
+  if (privateTrips?.isPrivate()) { savePrivateResult(); return; }
   saveStatus.textContent = '';
   try {
     const saved = store.save(saveTrip.value, currentCalculation, inputs());
@@ -264,7 +328,8 @@ saveButton.addEventListener('click', () => {
   } catch (error) { saveStatus.textContent = error.message; }
   updateSaveButton();
 });
-window.addEventListener('storage', event => { if (event.key === STORAGE_KEY || event.key === null) refreshTrips(); });
+window.addEventListener('storage', event => { if (!privateTrips?.isPrivate() && (event.key === STORAGE_KEY || event.key === null)) refreshTrips(); });
+privateTrips = mountAccountUI({ onChange: changeTripStorage });
 refreshTrips();
 syncPersonFields();
 

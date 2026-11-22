@@ -128,7 +128,10 @@ test('both entry pages include privacy markers and success hooks remain after co
   assert.ok(page.includes('data-analytics-surface="product_page"'));
   assert.ok(app.includes('data-analytics-surface="calculator"'));
   const main = readFileSync(new URL('../src/main.js', import.meta.url), 'utf8');
-  assert.ok(main.indexOf("analytics.track('result_saved')") > main.indexOf('store.save('));
+  const guestSave = main.slice(main.indexOf("saveButton.addEventListener('click'"));
+  assert.ok(guestSave.indexOf("analytics.track('result_saved')") > guestSave.indexOf('store.save('));
+  const privateSave = main.slice(main.indexOf('async function savePrivateResult('), main.indexOf("document.querySelector('#create-trip').addEventListener"));
+  assert.ok(privateSave.indexOf("analytics.track('result_saved')") > privateSave.indexOf('await privateTrips.cloud.save('));
   assert.ok(main.indexOf("analytics.track('calculation_succeeded')") > main.indexOf('renderResult(content, result'));
   assert.ok(main.indexOf("analytics.track('conversion_succeeded')") > main.indexOf('conversionStatus.replaceChildren(summary, rate)'));
   assert.ok(main.indexOf("analytics.track('saved_details_opened')") > main.indexOf('target.prepend(description)'));

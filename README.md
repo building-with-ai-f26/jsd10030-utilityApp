@@ -310,3 +310,71 @@ Verified backend: https://jsd10030-utilityapp.onrender.com.  GET `/health` retur
 The publishing build was run with `VITE_API_ORIGIN=https://jsd10030-utilityapp.onrender.com npm run build:pages`.  Generated HTML uses the project `/app/` asset base; the JavaScript contains that backend origin and `/api/rates`, with no direct Frankfurter endpoint.  All 124 tests, both builds, generated-path and whitespace checks passed.  GitHub Pages serves the committed `docs/app/` output after deployment; its served HTML/assets must match before declaring this deployment verified.
 
 Public browser calculation/conversion/save-reopen checks using this hosted backend remain pending, as do controlled cold-start/retry testing and conversion_failed PostHog receipt.  Earlier local browser checks and November 15 public observations remain historical evidence.  No Icerynk resubmission was made.  Recorded time remains 4 hours 20 minutes; recorded development spending remains $27 in Codex credits, with ChatGPT Pro separate/unallocated, token usage unmeasured, and runtime cost per user run unmeasured.
+
+## November 22 feature branch: sign-in and private trips (not deployed)
+
+Branch: `feature/private-trips`.  The existing Pages calculator and Render rate API remain unchanged.  The local app adds email/password sign-in using Supabase Auth and private Postgres storage.  It defaults to **This browser · guest trips**; signing in selects **Private account · across devices**.  The selector controls both Save and history.  Existing guest records stay in their original localStorage key, including old Equal snapshots.  Nothing imports, deletes or uploads guest history automatically; an import feature is not included.  You may select browser storage even while signed in.
+
+Private bills reuse the original version-2 calculation snapshot (inputs, split mode, exact integer-cent result and breakdown).  Currency estimates are never saved.  The app clears private history, opened details, current results and conversion output on sign-out/account changes, and rejects late responses from an earlier account.  It does not keep an offline cache of private trips.  A confirmed save means Supabase accepted the write; failures never claim success.  If sign-out fails, the view still clears and shows an explicit retry; retry successfully before leaving a shared browser.  Supabase's authenticated session is stored by its SDK in that browser so reopening the app can restore sign-in; XSS or access to the browser profile remains a risk.
+
+### Your hosted setup (the agent has not performed these actions)
+
+The builder has now reported applying the migration successfully; do not rerun it.  The remaining setup/test instructions below are retained for reference.
+
+1. Create/use a **Free Supabase project**.  Review `supabase/migrations/20261122_private_trips.sql`, then run it **once** in that project's SQL Editor.  It creates new tables, not a migration of guest history.  Stop if those tables already exist; do not drop existing tables to rerun it.
+2. Run `supabase/verify_private_trips.sql` for read-only setup evidence.  It should show RLS enabled on both tables, owner SELECT/INSERT policies, authenticated SELECT/INSERT grants only and no anon grants.  Neither this inspection nor tests with database mocks prove hosted RLS enforcement.
+3. In **Authentication → Providers / Sign In**, ensure Email/password sign-in is enabled.  In **Authentication → Users → Add user → Create new user**, create two test users A and B with passwords known only to you.  Confirm their emails using the dashboard's test-user option or the real confirmation flow.  This first version signs in existing users; signup, password reset, OAuth and invitations inside the app are not included.  Do not disable project-wide email confirmation just to bypass testing.
+4. In project settings / Connect, copy the project URL and **publishable** key locally.  Add or replace only these two lines in your existing ignored `.env`; do not overwrite the rest of that file:
+
+```dotenv
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_REPLACE_ME
+```
+
+Replace the placeholders with your project's public configuration.  Keep passwords, database connection strings, secret keys and legacy service-role keys out of VITE variables, screenshots, chat and Git.  Build guards reject private or legacy keys in this setting.  Placeholders or absent configuration leave guest mode available and sign-in disabled.
+
+5. Run `npm ci` if dependencies are missing.  Keep `npm run dev:api` on 3001, restart `npm run dev`, and open **http://127.0.0.1:5173/** in the original browser profile.  Restarting Vite loads the public configuration without deleting guest records.  Accounts send credentials directly to Supabase over HTTPS, not Render or PostHog.  Saving private trips sends names and original bill snapshots to Supabase under the signed-in owner.  The Render/Frankfurter currency-pair flow is unchanged.
+
+For your later Pages deployment, explicitly supply `VITE_API_ORIGIN`, `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` in the publishing environment (`vite.publish.config.js` does not load `.env`).  Rebuild `docs/app/` only after hosted account/RLS checks pass and you are ready to deploy.  All VITE settings are public, not secrets.  No hosted setup, publishing build replacement, deployment or submission was done for this branch.
+
+### Two-account manual test — A reopening observed; B isolation pending
+
+1. In browser 1, sign into A; confirm the destination says **Private account**.  Create a private trip.  Calculate USD subtotal `100`, charges `8`, tip `20`, two diners, **By person** subtotals `30` and `70`.  Expect total `128.00`, shares `38.40` and `89.60`.  Explicitly save, then Open details and check the entire breakdown.  Record A's trip ID locally from the authenticated `utility_trips` response in DevTools (opaque IDs are not passwords; do not capture auth headers).
+2. In a second browser/device signed into A, select that trip and Open details.  Verify the same inputs, By person mode, shares, all component amounts and saved timestamp.  Sign out; private names/details must disappear, including after using Back/Forward.  In browser 1, sign out and confirm the old guest trips still open under **This browser**.  No import should have occurred.
+3. Sign into B.  B's empty history is **not sufficient proof of isolation**: request A's specific trip ID as B, without an owner filter.  On the local app, run the following read-only check in DevTools, replacing the three public/test identifiers.  It reads B's current session internally and prints only HTTP status and row count; never print or screenshot the session or headers.
+
+```javascript
+const projectUrl = 'https://YOUR-PROJECT.supabase.co';
+const publicKey = 'sb_publishable_YOUR-PUBLIC-KEY';
+const tripId = 'A-TRIP-UUID';
+const sessionKey = Object.keys(localStorage).find(k => /^sb-.*-auth-token$/.test(k));
+const bSession = JSON.parse(localStorage.getItem(sessionKey));
+const response = await fetch(`${projectUrl}/rest/v1/utility_trips?select=id&id=eq.${encodeURIComponent(tripId)}`, {
+  credentials: 'omit',
+  headers: { apikey: publicKey, Authorization: `Bearer ${bSession.access_token}` },
+});
+const rows = await response.json();
+console.log({ status: response.status, visibleRows: Array.isArray(rows) ? rows.length : 'ERROR' });
+```
+
+Expected B result: **status 200, visibleRows 0** (RLS hides A's row), not an error or a visible trip.  If it returns a row, stop deployment and review the migration/policies.  While signed into A, the same specific-ID request should return one row, proving the identifier is correct.  A 401/403 due to a missing/expired token does not establish row isolation.  Use a fresh console tab/reload between accounts, because top-level `const` variables cannot be redeclared in the same console scope.  Do not paste these sessions or private account details into chat.
+
+### Safe Build 3 evidence to capture
+
+- A's non-sensitive test bill (128.00, 38.40/89.60) reopened in browser 2, with Private account selected, split mode and full breakdown.  Hide email/account details and use a disposable trip name.
+- The A-versus-B specific-ID request results (A: one row; B: zero), plus the SQL read-only RLS/policy/grant output.  Capture only the safe count/status output, never Authorization, cookies, passwords, refresh/access tokens or private keys.  A “no trips” screen alone does not prove RLS.
+- Sign-out showing private details removed and guest history still accessible.  Refresh PostHog action flow and a playable replay with account email/password, trip names, amounts, selectors and saved results all masked/blocked.  Never loosen masking to capture evidence.
+- Repeat a redacted secret scan and dependency audit after final public configuration/build.  Friday's screenshot applies to the guest-only app commit and is historical evidence, not verification of the new login/storage surface.  Friday's observed funnel/phone/replay findings remain valid for that earlier build; the failure cause/wait time remains unconfirmed.
+
+Local automated checks use mocked Supabase responses and DOM handlers, not a hosted database.  They verify exact snapshots, guest compatibility, stale writes, authentication changes and sign-out clearing.  **The builder reported migration success, A’s Chrome reopening and B sign-in.  RLS enforcement, the specific-ID two-account test, broader cross-device checks and new live replay/funnel checks remain pending.**  No local Postgres/Supabase CLI was available to execute the migration in this environment.
+
+Official references reviewed: [password sign-in](https://supabase.com/docs/reference/javascript/auth-signinwithpassword), [Auth state changes](https://supabase.com/docs/reference/javascript/auth-onauthstatechange), [row-level security](https://supabase.com/docs/guides/database/postgres/row-level-security), [public versus private API keys](https://supabase.com/docs/guides/api/api-keys).  The new SDK is a production dependency; the lockfile pins its resolved version.  No paid Supabase service was enabled by the agent.  Existing $27 Codex development spending and 4 hours 20 minutes recorded time remain unchanged; November 20 and November 22 actual additional time/spending are pending.  Hosted usage/cost and runtime cost per run are unmeasured.
+
+### Local check record and submission handoff (November 22)
+
+- **Observed locally:** 140 passing tests; production build passed; temporary Pages builds passed both without account configuration (guest fallback) and with synthetic public project/key fixtures (compile-only).  `npm audit --package-lock-only --json` returned 0 advisories in every severity.  No real Auth/Postgres request was made with fixtures; do not deploy fixture output.
+- **Builder-reported hosted/local progress:** the utility-suite migration was applied with “Success. No rows returned.”  Local public configuration was validated without printing values, and Vite restarted.  Chrome reopened A’s private test trip at $128.00 with $38.40/$89.60 shares.  B signed in and selected Private account.
+- **Still pending:** independent policy/grant inspection, B’s authenticated requests for A’s specific trip and saved bill, new sign-out/browser regressions, public feature deployment/release checks and account-field replay.  An empty B dropdown alone is not a privacy pass.  No production publish output was changed.
+- **Workdays:** Git records November 16 evening and November 20 evening ET, two distinct days.  The current rubric's outside-class qualification and required submission fields must be confirmed in Icerynk; no connector is available here.
+- **Known links to hand off:** Product Page `https://building-with-ai-f26.github.io/jsd10030-utilityApp/`, calculator `/app/`, repository `https://github.com/building-with-ai-f26/jsd10030-utilityApp`, SECURITY.md, PRD v3 and journal/build-03-build.md.  They currently describe the reviewed guest-only main release; this private-trips branch is not deployed.  Confirm the assignment's exact fields and attach fresh RLS/flow/privacy evidence only after observed.  User submits; no resubmission was made.
+- **Pending records:** classmate phone feedback and actual additional time/Codex spending for November 20/22.  Existing submission dates and $27 / 4 hours 20 minutes totals are preserved.

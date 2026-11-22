@@ -36,3 +36,38 @@ Optional working notes. Publish your required build log on `docs/index.html`; no
 ## 6. Pod Critique Sign-off
 
 - **Classmate phone feedback:** Pending.  These phone checks were my own, not classmate feedback.
+
+
+---
+
+**Entry:** November 22, 2026 (ET) — private-trips feature branch, not deployed
+
+## 1. What I made
+
+- I added optional sign-in and private trips while keeping existing guest records on-device.  New private saves reuse the exact original-currency snapshot and existing details renderer; conversion estimates are not saved.  I prepared an owner-only RLS migration for my hosted review.
+- I applied the private-trips migration in my utility-suite Supabase project.  The SQL Editor reported “Success. No rows returned.”  This records my reported application, not a completed RLS isolation test.  I configured the local app and reported that Chrome reopened my private test trip with a $128.00 total and $38.40/$89.60 shares.  I also signed in as Account B and selected Private account.  B's authenticated requests against A's specific trip and saved bill have not been observed, so the two-account privacy test remains pending.  I will handle deployments myself.
+
+## 2. What I learned / rules
+
+- A mocked successful save is not proof of RLS.  I need both a real A cross-browser result and a specific-ID request using B's credentials, plus policy inspection.  Friday's clean search and own phone/replay evidence remain historical, not verification of new account storage.
+
+## 3. What the agent did
+
+- Codex implemented the feature branch, setup guide and migration, tested guest compatibility, exact snapshots, stale writes and sign-out/late-response clearing, and kept the public calculator build unchanged.  Hosted permissions and live replay must still be checked by me.
+
+## 4. What remains / evidence
+
+- Recheck the current Beginner rubric and submission fields; Icerynk is not available to the agent.  Git has commits on November 16 and 20 (ET), two distinct workdays; outside-class qualification still needs the exact rubric.
+- Refresh Auth/database permissions, two-account isolation, public sign-out behavior, secret/dependency scans and live PostHog flow/playable replay with account inputs masked.  Friday's observed conversion_failed and later success are retained; its exact failure cause/wait remain unconfirmed.
+- Classmate phone feedback remains pending.  I will submit the Product Page/repository and whatever evidence the current assignment actually requests; no new submission was made.
+
+## 5. Actual time and cost
+
+- November 20 actual additional time/Codex spending: pending.  November 22 actual time and additional spending: pending; the one-hour work window is a budget, not a measured time entry.
+- Previously recorded totals stay 4 hours 20 minutes and $27 Codex development credits.  My existing Pro subscription remains separate/unallocated; token usage, hosted usage cost and runtime cost per run are unmeasured.  No paid service was enabled by the agent.
+
+## 6. Next use
+
+- Once private-trip isolation is verified, I can reuse the owner-scoped trip container for another utility by adding an explicit utility type/version and its own validated snapshot.  This branch still stores tipping snapshots only.
+
+**Local check record:** I recorded Codex's run of 140 passing tests, a successful production build and temporary Pages builds, and a fresh lockfile audit reporting 0 advisories.  Account tests used mocked Auth/Postgres responses and DOM handlers; they do not establish hosted RLS or general cross-device behavior.  My reported Chrome reopening is separate browser evidence; Account B isolation, fresh sign-out/privacy evidence and live release checks remain pending.

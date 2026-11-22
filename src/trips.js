@@ -32,6 +32,14 @@ export function isCurrent(calculation, inputs) {
   try { return JSON.stringify(calculation) === JSON.stringify(prepareCalculation(inputs)); }
   catch { return false; }
 }
+// Postgres jsonb can reorder object keys. Compare values, retaining array/diner order.
+function sameData(a, b) {
+  if (a === b) return true;
+  if (Array.isArray(a) || Array.isArray(b)) return Array.isArray(a) && Array.isArray(b) && a.length === b.length && a.every((value, index) => sameData(value, b[index]));
+  if (!a || !b || typeof a !== 'object' || typeof b !== 'object') return false;
+  const keys = Object.keys(a);
+  return keys.length === Object.keys(b).length && keys.every(key => Object.hasOwn(b, key) && sameData(a[key], b[key]));
+}
 function validate(data) {
   if (!data || data.version !== 1 || !Array.isArray(data.trips) || !Array.isArray(data.results)) invalid();
   const ids = new Set(); const names = new Set();
@@ -50,12 +58,14 @@ function validate(data) {
       const isLegacy = saved.snapshotVersion === undefined && saved.splitMode === undefined && saved.inputs.splitMode === undefined;
       if (!isLegacy && (saved.snapshotVersion !== 2 || saved.splitMode !== mode)) invalid();
       const keys = [...resultKeys, ...(mode === 'by_person' ? ['breakdown'] : [])];
-      if (!keys.every(key => JSON.stringify(saved.result?.[key]) === JSON.stringify(expected.result[key]))) invalid();
+      if (!keys.every(key => sameData(saved.result?.[key], expected.result[key]))) invalid();
     } catch { invalid(); }
     resultIds.add(saved.id);
   }
   return data;
 }
+
+export const validateTripData = validate;
 
 // Storage is accessed lazily: even accessing window.localStorage can throw.
 export function createTripStore(getStorage, makeId = () => crypto.randomUUID(), now = () => new Date().toISOString()) {

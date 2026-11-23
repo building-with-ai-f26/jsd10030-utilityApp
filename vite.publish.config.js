@@ -19,6 +19,8 @@ export default defineConfig({
   publicDir: false,
   envDir: false,
   build: {
+    // Keep SDK whitespace literals escaped so generated files pass Git whitespace checks.
+    rolldownOptions: { output: { minify: { codegen: { removeWhitespace: false } } } },
     // This directory contains generated files only. Never use docs/ as outDir.
     outDir: 'docs/app',
     emptyOutDir: true,

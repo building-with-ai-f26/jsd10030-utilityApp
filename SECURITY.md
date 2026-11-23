@@ -115,3 +115,24 @@ This is a local implementation addendum on `feature/private-trips`, not a claim 
 **Rubric reconciliation:** no Icerynk connector/current assignment text is available, so whether this added Auth/Postgres scope still fits the Beginner lane and the exact submission fields/evidence wording require confirmation.  Do not invent acceptance.  Git records work on November 16 (21:35–22:03 ET) and November 20 (18:14–18:59 ET), two distinct days in the week; their qualification under the exact outside-class rule needs rubric confirmation.  Friday's own phone/replay/funnel observations are in journal/build-03-build.md and remain historical; classmate phone feedback is pending.  Original Build 2 submission history is preserved.  Recorded hours/costs remain 4 hours 20 minutes and $27 development credits; subsequent actual time/spending and runtime unit costs remain unconfirmed.  User handles hosted changes, deployment and Icerynk submission; none was performed here.
 
 **November 22 local check results:** 140 deterministic/mock/DOM tests passed; the production build and temporary Pages builds (guest configuration and synthetic public Auth configuration) passed.  `npm audit --package-lock-only --json` returned 0 advisories: info/low/moderate/high/critical all zero.  This refreshes the lockfile advisory snapshot after adding Supabase; it does not verify live RLS or a new credential scan of the final configured/live feature.  No hosted database or account credentials were used for these checks.
+
+
+## November 23 — two-account read privacy check PASSED (localhost → hosted Supabase)
+
+The builder reported completing the local button checker using the app's existing Supabase client and normal signed-in sessions.  Both accounts were verified with Auth.  Safari Account A requested its existing test trip and saved bill by exact IDs; Chrome Account B requested those same records without an owner filter.  No service-role/admin key or SQL Editor role was used for these app reads.
+
+| Browser / verified account | Trip request status | Trip rows | Bill request status | Bill rows |
+| --- | --- | --- | --- | --- |
+| Safari / Account A | HTTP 200 | 1 | HTTP 200 | 1 |
+| Chrome / Account B | HTTP 200 | 0 | HTTP 200 | 0 |
+
+**Result: PASSED for these exact-record SELECT checks.**  A could read the known existing trip/bill while B's successful authenticated requests returned zero matching rows.  This is stronger evidence than an empty dropdown, missing record, failed sign-in or network error.  A had also reported reopening the $128.00 By person bill with $38.40/$89.60 shares.  This is builder-reported browser evidence from the **localhost frontend connected to hosted Supabase**, not an independently observed or published-app result.  No screenshot file or additional hours/costs are claimed here.
+
+This result supersedes the earlier pending Account B read-isolation status for this local check only.  It does not establish every RLS operation, anonymous denial, forged-owner insert denial, deployed-app behavior or all future records.  The development checker is excluded from production builds.  Public deployment verification, public sign-in/save/reopen/sign-out, refreshed live account-field PostHog flow/replay, final configured/live credential scan and classmate feedback remain pending.  Existing security risks, historical audit scope and recorded hours/costs are unchanged.
+
+
+## November 23 — release candidate artifact checks
+
+The GitHub Pages production build was generated on feature/private-trips with the existing Render origin and the public Supabase URL/publishable key loaded from ignored .env.local.  Configuration validation passed; the generated JavaScript contains those public settings and the existing rates endpoint, enabling private-account sign-in.  No configuration values were printed.  The development checker modules/UI/result markers are absent from both production outputs.  .env.local remains ignored and excluded from Git.
+
+Release checks: 156 tests passed; standard and real Pages production builds passed; generated HTML/assets and documentation links/whitespace checked.  Normal Render /health and USD/EUR requests with the Pages Origin returned HTTP 200, expected JSON and the matching allow-origin header.  The existing-lockfile audit succeeded with info/low/moderate/high/critical all zero.  A limited generated-bundle scan found no recognizable private PEM, Supabase secret, PostHog personal, OpenAI/Anthropic/OpenRouter or Stripe private-key values; this is not a new history scan or verification of future served assets.  Public publish/deployment checks, refreshed live account-field replay/funnel and broader permissions checks remain pending.  No hosted configuration was changed for this release preparation.

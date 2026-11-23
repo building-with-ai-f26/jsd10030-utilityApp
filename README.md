@@ -378,3 +378,30 @@ Official references reviewed: [password sign-in](https://supabase.com/docs/refer
 - **Workdays:** Git records November 16 evening and November 20 evening ET, two distinct days.  The current rubric's outside-class qualification and required submission fields must be confirmed in Icerynk; no connector is available here.
 - **Known links to hand off:** Product Page `https://building-with-ai-f26.github.io/jsd10030-utilityApp/`, calculator `/app/`, repository `https://github.com/building-with-ai-f26/jsd10030-utilityApp`, SECURITY.md, PRD v3 and journal/build-03-build.md.  They currently describe the reviewed guest-only main release; this private-trips branch is not deployed.  Confirm the assignment's exact fields and attach fresh RLS/flow/privacy evidence only after observed.  User submits; no resubmission was made.
 - **Pending records:** classmate phone feedback and actual additional time/Codex spending for November 20/22.  Existing submission dates and $27 / 4 hours 20 minutes totals are preserved.
+
+## November 23: localhost-only privacy checker (local A/B read test passed)
+
+The development app now adds **Local privacy check** inside the account panel when it runs on localhost with the existing configured Supabase client.  It is dynamically imported only in Vite development mode.  Both production builds were inspected: checker modules, UI and result markers are absent.  `docs/app/` is unchanged.  The helper makes normal authenticated SELECT requests only, with no owner filter, service key, token-pasting or database writes.
+
+- In Safari as A, select **build 3 private test**, open the existing $128 By person bill, then expand **Local privacy check**.  Choose **Account A · existing selected bill**, enter A's expected email locally and click **Check selected bill as A**.  The helper verifies the normal session and current account with Supabase Auth before/after the reads.  The expected baseline is verified account, trip HTTP 200 / rows 1, bill HTTP 200 / rows 1.  It validates the test name, exact selected trip/bill IDs, ownership and the existing 128.00 / 38.40 / 89.60 snapshot before enabling **Copy test reference**.
+- Click **Copy test reference**.  The reference contains project/owner/record IDs and a timestamp, not credentials, names, emails, amounts or tokens.  It is an unsigned local test reference, not an access grant or cryptographic proof; copy it directly from A's successful baseline and do not edit it.  It expires after 24 hours.
+- In Chrome as B, expand **Local privacy check**, choose **Account B · pasted test reference**, enter B's expected email locally, paste the reference and click **Check reference as B**.  The same existing client issues reads by exact trip ID and exact bill ID plus its trip ID.  Only two HTTP 200 results with zero/zero rows produce **B READ ISOLATION VERIFIED**.  Visible rows produce FAIL; wrong account, malformed reference, expired session, failed request (including 401/403) or network timeout produce INCONCLUSIVE, never a pass.
+- The helper clears typed email/reference before displaying results, and resets on sign-out/account change.  Capture only the result panel (environment, outcome, verified account label, request status and counts).  Do not capture DevTools, emails, passwords, tokens, reference contents or request headers.  All helper DOM is blocked from replay, and no helper analytics events or console dumps are added.
+
+Observed local checks: 156 tests passed, including mocked positive A reads, B zero/zero reads, leak/failure/expired/wrong-account cases, safe UI output, clipboard reference and existing guest/account regressions.  Both production builds passed and checker exclusion was verified in generated assets.  Automated tests alone did not establish hosted isolation.  The builder subsequently reported verified accounts and successful exact-ID reads: Safari A returned one trip and one bill; Chrome B returned zero of each, both HTTP 200.  This local-to-hosted read-isolation check passed and is recorded in SECURITY.md and the journal.  Published private-account checks remain pending.  The helper is included in the local release candidate; no new hours/costs, deployment or submission are claimed.
+
+
+### Build 3 release candidate — November 23
+
+Marisa's published-app review confirmed the 38.40/89.60 split, EUR conversion, explicit saving and reopening after refresh; the saved snapshot stayed in USD.  Saving a reference-rate estimate alongside the original bill is a future improvement, not part of this release.  Her account mode/device were not supplied and this does not verify the new private-account release.
+
+Prepare the real Pages output without printing the public configuration values:
+
+```bash
+VITE_API_ORIGIN=https://jsd10030-utilityapp.onrender.com \
+node --env-file=.env.local node_modules/vite/bin/vite.js build --config vite.publish.config.js
+```
+
+The reviewed feature branch must reach `main` to publish through the existing main `/docs` Pages setup.  Merely pushing `feature/private-trips` does not publish it.  After publishing, verify the app/ HTML/assets, signed-in A save/reopen/sign-out, guest history, rates and new account-field PostHog replay.  Local checker exclusion and successful builds do not replace those public checks.  No public private-trips deployment or Icerynk submission is claimed here.
+
+The Pages minifier keeps readable output so SDK whitespace literals do not create trailing-whitespace failures in generated files.  The affected runtime string value was verified unchanged; this is a reproducible publishing configuration, not a manual bundle edit.

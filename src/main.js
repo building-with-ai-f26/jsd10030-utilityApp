@@ -33,6 +33,8 @@ let privateTrips;
 let tripScope = 0;
 let historyRevision = 0;
 let privateSaving = false;
+let openedBill = null;
+function setOpenedBill(saved) { openedBill = saved; }
 function inputs() {
   const values = Object.fromEntries(['destination', 'currency', ...fields, 'splitMode'].map(key => [key, form.elements[key].value]));
   if (values.splitMode === 'by_person') values.personSubtotals = [...personFields.querySelectorAll('input')].map(field => field.value);
@@ -195,6 +197,7 @@ function renderResult(target, result, currencyCode) {
 }
 
 function renderHistory(data) {
+  if (typeof setOpenedBill === 'function') setOpenedBill(null);
   const viewScope = typeof tripScope === 'number' ? tripScope : 0;
   const list = document.querySelector('#history-list');
   list.replaceChildren();
@@ -219,6 +222,7 @@ function renderHistory(data) {
       const description = document.createElement('p');
       description.textContent = `Trip: ${data.trips.find(trip => trip.id === saved.tripId).name}. Destination: ${destinations[saved.inputs.destination].name}. Currency: ${saved.inputs.currency}. Inputs: subtotal ${saved.inputs.subtotal}, charges ${saved.inputs.charges}, additional tip ${saved.inputs.tipPercent}%, diners ${saved.inputs.diners}. Saved ${new Date(saved.savedAt).toLocaleString()}. Split: ${(saved.splitMode ?? saved.inputs.splitMode ?? 'equal') === 'by_person' ? 'By person' : 'Equal split'}. Read-only snapshot; current guidance may differ.`;
       target.prepend(description);
+      if (typeof setOpenedBill === 'function') setOpenedBill(saved);
       analytics.track('saved_details_opened');
     });
     list.append(button);
@@ -241,6 +245,7 @@ function showTrips(data, selectedId) {
   updateSaveButton();
 }
 function historyError(error) {
+  openedBill = null;
   storageAvailable = false;
   document.querySelector('#storage-status').textContent = error.message;
   document.querySelector('#history-list').replaceChildren();
@@ -267,6 +272,7 @@ async function refreshPrivateTrips(selectedId) {
   }
 }
 function changeTripStorage() {
+  openedBill = null;
   tripScope++; historyRevision++; privateSaving = false; storageAvailable = false;
   saveTrip.replaceChildren(); historyTrip.replaceChildren();
   document.querySelector('#history-list').replaceChildren();
@@ -329,7 +335,10 @@ saveButton.addEventListener('click', () => {
   updateSaveButton();
 });
 window.addEventListener('storage', event => { if (!privateTrips?.isPrivate() && (event.key === STORAGE_KEY || event.key === null)) refreshTrips(); });
-privateTrips = mountAccountUI({ onChange: changeTripStorage });
+privateTrips = mountAccountUI({ onChange: changeTripStorage, getSelectedBill: () => {
+  if (!privateTrips?.isPrivate() || !openedBill || openedBill.tripId !== historyTrip.value || document.querySelector('#saved-details').hidden) return null;
+  return { tripId: openedBill.tripId, billId: openedBill.id };
+} });
 refreshTrips();
 syncPersonFields();
 

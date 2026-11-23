@@ -10,7 +10,7 @@ export function configuredSupabase(url, key) {
 }
 
 // This module never calls analytics or renders email/account IDs.
-export function mountAccountUI({ onChange, document: doc = document, client: suppliedClient } = {}) {
+export function mountAccountUI({ onChange, document: doc = document, client: suppliedClient, getSelectedBill = () => null } = {}) {
   const selector = doc.querySelector('#storage-mode');
   const status = doc.querySelector('#account-status');
   const login = doc.querySelector('#sign-in');
@@ -27,6 +27,7 @@ export function mountAccountUI({ onChange, document: doc = document, client: sup
   let owner = null;
   let signedOut = false;
   let authRevision = 0;
+  let resetPrivacyCheck = () => {};
   selector.value = 'browser';
   function paint() {
     const option = doc.querySelector('#private-mode-option');
@@ -41,6 +42,7 @@ export function mountAccountUI({ onChange, document: doc = document, client: sup
     owner = next;
     cloud?.setOwner(owner);
     if (changed) {
+      resetPrivacyCheck();
       selector.value = owner ? 'private' : 'browser';
       onChange(); // Synchronous clearing before any asynchronous reads.
     }
@@ -74,7 +76,7 @@ export function mountAccountUI({ onChange, document: doc = document, client: sup
     }
   });
   logout.addEventListener('click', async () => {
-    signedOut = true; authRevision++;
+    signedOut = true; authRevision++; resetPrivacyCheck();
     owner = null; cloud?.setOwner(null);
     selector.value = 'browser';
     doc.querySelector('#account-email').value = '';
@@ -109,6 +111,12 @@ export function mountAccountUI({ onChange, document: doc = document, client: sup
     status.textContent = 'Account storage is not configured yet. Guest trips remain available.';
   }
   paint();
+  if (import.meta.env?.DEV && typeof window !== 'undefined' && ['localhost','127.0.0.1','[::1]'].includes(window.location.hostname) && client) {
+    import('./local-privacy-ui.js').then(({ mountLocalPrivacyUI }) => {
+      const privacy = mountLocalPrivacyUI({ client, projectOrigin: url, getExpectedOwner: () => owner, getSelectedBill, document: doc });
+      resetPrivacyCheck = () => privacy?.reset();
+    }).catch(() => { /* Optional development checker cannot break the calculator. */ });
+  }
   return { isPrivate: () => selector.value === 'private' && Boolean(owner), cloud,
     label: () => selector.value === 'private' && owner ? 'Private account' : 'This browser' };
 }

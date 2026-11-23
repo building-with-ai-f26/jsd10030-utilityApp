@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Restaurant tipping guidance and an exact bill split for your next trip.">
   <title>Travel Tipping · Utility Suite</title>
-  <script type="module" crossorigin src="/jsd10030-utilityApp/app/assets/index-DOirXu9R.js"></script>
+  <script type="module" crossorigin src="/jsd10030-utilityApp/app/assets/index-DHKpzThG.js"></script>
   <link rel="stylesheet" crossorigin href="/jsd10030-utilityApp/app/assets/index-Co7SDJz7.css">
 </head>
 <body data-analytics-surface="calculator">
@@ -15,6 +15,23 @@
       <h1>A good meal.<br>A clear bill.</h1>
       <p class="intro">Check local tipping guidance, choose an additional tip and share the bill fairly.</p>
     </header>
+    <section class="card account-panel" id="account-panel" data-analytics-private aria-labelledby="account-title">
+      <h2 id="account-title">Save here or across devices</h2>
+      <p class="help">Guest trips stay on this device. Sign in to save new bills privately to your account and reopen them on another device. Existing guest trips are never uploaded automatically; importing is not included in this version.</p>
+      <p class="help">Sign-in credentials go to Supabase. Private saves send your trip names and bill snapshots there; analytics hides these account fields and bill details.</p>
+      <form id="account-form" data-analytics-private>
+        <div class="row">
+          <div><label for="account-email">Email</label><input id="account-email" data-analytics-private type="email" autocomplete="username" required></div>
+          <div><label for="account-password">Password</label><input id="account-password" data-analytics-private type="password" autocomplete="current-password" required></div>
+        </div>
+        <button id="sign-in" type="submit">Sign in</button>
+      </form>
+      <button id="sign-out" type="button" hidden>Sign out on this browser</button>
+      <p id="account-status" data-analytics-private role="status"></p>
+      <label for="storage-mode">Save and browse trips in</label>
+      <select id="storage-mode" data-analytics-private><option value="browser">This browser · guest trips</option><option id="private-mode-option" value="private" disabled>Private account · across devices</option></select>
+      <p class="help">Signing out clears private trips from view, not from your account. Do not use account storage on a shared device unless you can sign out successfully.</p>
+    </section>
     <div class="layout">
       <section class="card" aria-labelledby="calculator-title">
         <h2 id="calculator-title">Travel Tipping</h2>
@@ -78,6 +95,7 @@
           <p class="help">Source: <a href="https://frankfurter.dev/" data-analytics-action="open_rate_source">Frankfurter</a>.  The original bill and saved trips stay in their original currency.  Conversion estimates are not saved.</p>
         </section>
         <div class="save-controls">
+          <p id="save-destination" role="status">Save destination: This browser</p>
           <label for="save-trip">Save to trip</label>
           <select id="save-trip" data-analytics-private aria-describedby="save-help"></select>
           <button id="save-result" data-analytics-action="save_result" type="button" disabled>Save current result</button>
@@ -88,7 +106,7 @@
     </div>
     <section class="card trip-history" aria-labelledby="history-title">
       <h2 id="history-title">Your trips &amp; saved results</h2>
-      <p class="help">Saved only in this browser profile at this exact address (including the port). No cloud backup or sync. Clearing browser data removes trips; private browsing may erase them when closed. Storage is limited and may be blocked or full. Use the same URL when reopening the app.</p>
+      <p class="help">Choose This browser for existing guest trips, or Private account after signing in. Guest history stays at this browser origin and can be lost when site data is cleared. Private trips are stored in your Supabase account project and require sign-in and internet access. Conversion estimates are not saved. No guest data is uploaded automatically.</p>
       <p id="storage-status" data-analytics-private role="status"></p>
       <form id="create-trip">
         <label for="trip-name">New trip name</label>
@@ -103,7 +121,7 @@
         <div id="saved-content"></div>
       </section>
     </section>
-    <p class="help">We use PostHog for usage events and masked session replay to improve this prototype.  Form values, trip names, bill amounts and saved details are hidden from replay and excluded from action events.  We do not identify you by name or email.</p>
+    <p class="help">We use PostHog for usage events and masked session replay to improve this prototype.  Account details, form values, trip names, bill amounts and saved details are hidden from replay and excluded from action events.  We do not identify you by name or email.</p>
     <footer><p>Amounts are calculated in whole cents. Any leftover cents go to the first diners so shares add up exactly.</p><p>Results are saved only when you choose Save current result. Saved details are snapshots, independent of later calculator changes.</p></footer>
   </main>
 </body>

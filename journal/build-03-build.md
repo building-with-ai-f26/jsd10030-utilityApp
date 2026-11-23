@@ -71,3 +71,38 @@ Optional working notes. Publish your required build log on `docs/index.html`; no
 - Once private-trip isolation is verified, I can reuse the owner-scoped trip container for another utility by adding an explicit utility type/version and its own validated snapshot.  This branch still stores tipping snapshots only.
 
 **Local check record:** I recorded Codex's run of 140 passing tests, a successful production build and temporary Pages builds, and a fresh lockfile audit reporting 0 advisories.  Account tests used mocked Auth/Postgres responses and DOM handlers; they do not establish hosted RLS or general cross-device behavior.  My reported Chrome reopening is separate browser evidence; Account B isolation, fresh sign-out/privacy evidence and live release checks remain pending.
+
+
+---
+
+**Entry:** November 23, 2026 (ET) — two-account privacy check
+
+## 1. What I verified
+
+- I completed the read-only checker using the **localhost app connected to hosted Supabase**.  Both signed-in accounts were verified.  In Safari, Account A received HTTP 200 with one matching trip row and one matching bill row.  In Chrome, Account B requested those same exact record IDs and received HTTP 200 with zero rows for each.
+- I marked this exact-record read-isolation check **passed**.  A could still reopen the $128.00 By person bill with $38.40/$89.60 shares.  An empty dropdown alone was not the evidence, and I did not use failed authentication or a network error as a pass.  The result is also recorded in [SECURITY.md](../SECURITY.md).
+
+## 2. What I learned
+
+- I need a known readable A record and completed B requests for that same trip and bill to demonstrate read isolation.  The checker uses the normal signed-in client without an owner filter or admin credentials.
+
+## 3. What remains
+
+- Public deployment and published-app sign-in, save/reopen/sign-out verification remain pending.  The checker is development-only and must stay out of the GitHub Pages build.
+- Other permissions checks, the refreshed account-field PostHog flow/replay, final live credential scan, classmate feedback and exact submission requirements remain pending.  I will handle deployment and Icerynk submission.
+
+## 4. Hours and costs
+
+- No new actual hours or Codex spending were supplied.  Earlier pending figures remain pending; the recorded 4 hours 20 minutes and $27 development spending are unchanged.  No screenshot capture or submission is claimed by this entry.
+
+
+## November 23 release preparation — feedback recorded
+
+- Marisa tested the published app: she got $38.40/$89.60 shares, converted the bill to EUR, saved the trip and reopened it after refreshing.  The saved bill showed USD.  This is feedback on the already published app, not verification of the new private-account release; her device and account mode were not supplied.
+- I will consider saving the EUR reference-rate estimate alongside the original bill as a future improvement, including its rate/date, while preserving the original USD snapshot.  This is not implemented in this release.
+- My localhost-to-hosted-Supabase two-account read test passed as recorded above.  Public deployment, account-field replay and release verification remain pending.  No new actual hours or additional Codex spending have been supplied; earlier recorded totals and pending figures are preserved.  I will handle publishing and Icerynk submission.
+
+
+**Release check record (November 23):** I recorded 156 passing tests, successful production and real GitHub Pages builds using the existing Render URL and public Supabase settings, correct generated asset paths, enabled private-account configuration and exclusion of the development privacy checker.  Render health/rates/Pages-origin checks passed; the lockfile audit returned 0 advisories.  HTML/link and whitespace checks passed.  These are release-preparation checks, not proof of the version being published.  Public private-account save/reopen/sign-out and new live replay remain pending.
+
+The Pages build uses a reproducible code-generation setting to escape an SDK whitespace literal cleanly.  Its runtime string value was checked unchanged; generated whitespace checks passed.  This changes bundle formatting, not the saved bill format.

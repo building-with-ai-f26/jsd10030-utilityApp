@@ -29,8 +29,8 @@ Optional working notes. Publish your required build log on `docs/index.html`; no
 
 ## 5. What it cost
 
-- **Additional Codex spending:** Pending; I have not supplied the actual figure.
-- **Actual hours:** Pending; I have not supplied my November 20 time.
+- **Actual spending:** $10 on November 20, 2026.
+- **Actual hours:** 2 hours on November 20, 2026.
 - **Previously recorded costs:** $27 for Codex development credits.  My ChatGPT Pro subscription remains separate and unallocated; token usage is unmeasured.  I have not confirmed additional runtime spending.
 
 ## 6. Pod Critique Sign-off
@@ -63,8 +63,8 @@ Optional working notes. Publish your required build log on `docs/index.html`; no
 
 ## 5. Actual time and cost
 
-- November 20 actual additional time/Codex spending: pending.  November 22 actual time and additional spending: pending; the one-hour work window is a budget, not a measured time entry.
-- Previously recorded totals stay 4 hours 20 minutes and $27 Codex development credits.  My existing Pro subscription remains separate/unallocated; token usage, hosted usage cost and runtime cost per run are unmeasured.  No paid service was enabled by the agent.
+- November 20 actuals: 2 hours and $10.  November 22 actuals: 2 hours and $10; these are confirmed actuals, not the earlier one-hour budget.
+- Before Build 3, my recorded totals were 4 hours 20 minutes and $27 for Codex development credits.  Through November 22, my recorded totals are 8 hours 20 minutes and $47.  My existing Pro subscription remains separate/unallocated; token usage, hosted usage cost and runtime cost per run are unmeasured.  No paid service was enabled by the agent.
 
 ## 6. Next use
 
@@ -93,14 +93,14 @@ Optional working notes. Publish your required build log on `docs/index.html`; no
 
 ## 4. Hours and costs
 
-- No new actual hours or Codex spending were supplied.  Earlier pending figures remain pending; the recorded 4 hours 20 minutes and $27 development spending are unchanged.  No screenshot capture or submission is claimed by this entry.
+- November 23 actuals: 2 hours and $10.  I spent 2 hours and $10 on each of November 20, 22 and 23: Build 3 totaled 6 hours and $30.  My cumulative recorded project total is 10 hours 20 minutes and $57.  The expense category for these additional $30 has not been specified; it is not an established per-user-run API cost.  No screenshot capture or submission is claimed by this entry.
 
 
 ## November 23 release preparation — feedback recorded
 
 - Marisa tested the published app: she got $38.40/$89.60 shares, converted the bill to EUR, saved the trip and reopened it after refreshing.  The saved bill showed USD.  This is feedback on the already published app, not verification of the new private-account release; her device and account mode were not supplied.
 - I will consider saving the EUR reference-rate estimate alongside the original bill as a future improvement, including its rate/date, while preserving the original USD snapshot.  This is not implemented in this release.
-- My localhost-to-hosted-Supabase two-account read test passed as recorded above.  Public deployment, account-field replay and release verification remain pending.  No new actual hours or additional Codex spending have been supplied; earlier recorded totals and pending figures are preserved.  I will handle publishing and Icerynk submission.
+- My localhost-to-hosted-Supabase two-account read test passed as recorded above.  Public deployment, account-field replay and release verification remain pending.  My confirmed Build 3 actuals are 6 hours and $30, bringing cumulative recorded project totals to 10 hours 20 minutes and $57.  Earlier entries are preserved.  I will handle publishing and Icerynk submission.
 
 
 **Release check record (November 23):** I recorded 156 passing tests, successful production and real GitHub Pages builds using the existing Render URL and public Supabase settings, correct generated asset paths, enabled private-account configuration and exclusion of the development privacy checker.  Render health/rates/Pages-origin checks passed; the lockfile audit returned 0 advisories.  HTML/link and whitespace checks passed.  These are release-preparation checks, not proof of the version being published.  Public private-account save/reopen/sign-out and new live replay remain pending.
